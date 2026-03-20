@@ -1,0 +1,90 @@
+<!DOCTYPE html> <!-- Define como HTML -->
+<html lang="pt-BR"> <!-- Define o idioma da pagina -->
+<head>
+  <meta charset="UTF-8"> <!-- Define a codificação de caracteres (UTF-8 suporta acentos) -->
+  <title>Carona Consciente</title> <!-- Título que aparee na aba do navegador -->
+  
+  <!-- Importa duas fontes do Google Fonts: Montserrat e Merriweather -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Merriweather:wght@400&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Merriweather', serif; /* Fonte padrão do corpo do texto */
+      text-align: center; /* Centraliza o conteúdo */
+      margin: 0; /* Remove margens padrão do navegador */
+      height: 100vh; /* Faz o body ocupar toda a altura da tela */
+      display: flex; /* Ativa flexbox para organizar elementos */
+      flex-direction: column; /* Organiza elementos em coluna (um embaixo do outro) */
+      justify-content: space-between; /* Espaça: título em cima, botões embaixo */
+      background: url('Wallpaper11.jpg') no-repeat center center fixed; /* Define imagem de fundo */
+      background-size: cover; /* Faz a imagem cobrir toda a tela */
+      color: #ffffff; /* Define cor do texto como branco */
+    }
+
+    h1 {
+      font-family: 'Montserrat', sans-serif; /* Fonte do título */
+      color: #b3062a; /* Cor vermelha personalizada */
+      font-weight: 700; /* Negrito */
+      margin-top: 40px; /* Espaço acima do título */
+      margin-bottom: 0; /* Remove espaço abaixo do título */
+      font-size: 90px; /* Tamanho grande para destaque */
+    }
+
+    h2 {
+      font-family: 'Montserrat', sans-serif; /* Fonte do subtítulo */
+      color: #b3062a; /* Mesma cor vermelha */
+      font-weight: 700; /* Negrito */
+      margin: 0; /* Remove margens padrão */
+      font-size: 35px; /* Tamanho médio */
+      margin-top: 0; /* Garante que fique colado ao h1 */
+    }
+
+    p {
+      font-weight: 400; /* Peso normal */
+      margin-bottom: 30px; /* Espaço abaixo do parágrafo */
+      margin-top: 80px; /* Espaço acima do parágrafo */
+      font-size: 50px; /* Texto grande para destaque */
+    }
+
+    .botoes {
+      display: flex; /* Ativa flexbox para os botões */
+      flex-direction: column; /* Empilha os botões verticalmente */
+      align-items: center; /* Centraliza os botões horizontalmente */
+      margin-bottom: 40px; /* Espaço entre os botões e o fundo da tela */
+    }
+
+    .btn-login {
+      background-color: #b3062a; /* Fundo vermelho */
+      color: #fff; /* Texto branco */
+      font-size: 32px; /* Fonte maior */
+      padding: 15px 45px; /* Espaçamento interno (altura x largura) */
+      margin-bottom: 15px; /* Espaço entre login e registrar */
+      cursor: pointer; /* Mostra a mãozinha ao passar o mouse */
+      border: none; /* Remove borda padrão */
+      border-radius: 5px; /* Bordas arredondadas */
+    }
+
+    .btn-registro {
+      background-color: #333; /* Fundo cinza escuro */
+      color: #fff; /* Texto branco */
+      font-size: 26px; /* Fonte um pouco menor */
+      padding: 10px 100px; /* Botão mais largo */
+      cursor: pointer; /* Mostra a mãozinha ao passar o mouse */
+      border: none; /* Remove borda padrão */
+      border-radius: 10px; /* Bordas arredondadas maiores */
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <h1>Carona Consciente</h1> <!-- Título principal -->
+    <h2>Participe hoje!</h2> <!-- Subtítulo logo abaixo -->
+    <p>Ajude a criar uma Sorocaba mais eficiente</p> <!-- Texto explicativo -->
+  </div>
+
+  <div class="botoes"> <!-- Container dos botões -->
+    <button class="btn-login" onclick="location.href='login.html'">Login</button> <!-- Botão de login -->
+    <button class="btn-registro" onclick="location.href='registro.html'">Registrar</button> <!-- Botão de registro -->
+  </div>
+</body>
+</html>
