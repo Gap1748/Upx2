@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esquecidos</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: black;
+            font-family: 'Arial Black', sans-serif;
+        }
+
+        #video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+            filter: brightness(0.4);
+        }
+
+        .gif-bar {
+            position: fixed;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px;
+            z-index: 10;
+        }
+
+        .top-bar { top: 0; }
+        .bottom-bar { bottom: 0; }
+
+        .gif-bar img {
+            width: 250px; 
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .centro {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            z-index: 5;
+        }
+
+        h1 { font-size: 3rem; text-shadow: 4px 4px 10px black; margin-bottom: 20px; }
+        h2 { font-size: 1rem; color: #ff4d4d; max-width: 600px; text-shadow: 2px 2px 5px black; }
+
+        .ckr-voltas {
+            margin-top: 40px;
+            padding: 15px 50px;
+            font-size: 30px;
+            background: transparent;
+            color: white;
+            border: 4px solid white;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .ckr-voltas:hover { background: white; color: black; }
+    </style>
+</head>
+<body onclick="iniciarAudio()">
+
+    <video id="video-background" autoplay muted loop playsinline preload="auto">
+    <source src="Keks_Und_Lols/archavu.mp4" type="video/mp4">
+    Seu navegador não consegue carregar o vídeo. Verifique o caminho.
+</video>
+
+    <audio id="musica" loop preload="auto">
+        <source src="Keks_Und_Lols/Moskwa.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="gif-bar top-bar">
+        <img src="Keks_Und_Lols/imouto1.gif"><img src="Keks_Und_Lols/Fox.gif"><img src="Keks_Und_Lols/Arisu.gif"><img src="Keks_Und_Lols/Vazs.gif"><img src="Keks_Und_Lols/Wife.gif">
+    </div>
+
+    <div class="centro">
+        <h1>Essa é o fim do individual e coletivo.</h1>
+        <h2>КОМУ КАКОЕ ДЕЛО ДО ЭТОГО ЧЁРТОВОГО ЗАМЫСЛА, O IMPORTANTE É RODAR</h2>
+        <a href="Basicus.html" class="ckr-voltas">VOLTAR</a>
+    </div>
+
+    <div class="gif-bar bottom-bar">
+        <img src="Keks_Und_Lols/Daz.gif"><img src="Keks_Und_Lols/borak.gif"><img src="Keks_Und_Lols/break.gif"><img src="Keks_Und_Lols/sakuta.gif"><img src="Keks_Und_Lols/vol.gif">
+    </div>
+
+    <script>
+        function iniciarAudio() {
+            var audio = document.getElementById("musica");
+            audio.volume = 0.5; 
+            audio.play().catch(error => console.log("Ainda bloqueado:", error));
+        }
+    </script>
+
+</body>
+</html>

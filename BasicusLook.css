@@ -1,0 +1,113 @@
+body {
+  font-family: 'Merriweather', serif;
+  text-align: center;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: url('DaBackground.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: #ffffff;
+}
+
+header, footer {
+  background-color: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+header {
+  padding: 50px 0; 
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+footer {
+  padding: 40px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  margin-top: auto; 
+}
+
+main {
+  flex-grow: 1;
+}
+
+h1 {
+  font-family: 'Montserrat', sans-serif;
+  color: #ff0037; 
+  font-size: 64px; 
+  margin: 0;
+}
+
+h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 28px;
+  color: #ff0037;
+  margin: 10px 0 40px 0;
+}
+
+.sub-titulo {
+  font-size: 24px;
+  margin-top: 10px;
+  opacity: 0.8;
+}
+
+.clickers {
+  display: flex;
+  flex-direction: row; 
+  justify-content: center;
+  gap: 20px;
+}
+
+.ckr-login, .ckr-registro {
+  width: 250px;
+  padding: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+  border: none;
+  font-size: 1.2rem;
+}
+
+.ckr-login {
+  background-color: #b3062a;
+  color: #fff;
+}
+
+.ckr-login:hover {
+  background-color: #d40732; 
+}
+
+.ckr-registro {
+  background-color: #94007e;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.ckr-saber {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-family: 'Montserrat', sans-serif; 
+  font-size: 14px; 
+  font-weight: bold;
+  text-transform: uppercase; 
+  letter-spacing: 1px;
+  
+  color: rgba(255, 255, 255, 0.6); 
+  background-color: rgba(255, 255, 255, 0.1);
+  
+  padding: 8px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ckr-saber:hover {
+  color: #ffffff; 
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: #ff0037; 
+}
