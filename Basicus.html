@@ -3,16 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <title>Carona Consciente</title>
+  <!-- Essa é da first que uso isso >.<
+       peguei de uma ia por nem saber onde tirar esse link
+       até esqueci que diferença isso faz mas não irei mexer kek -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Merriweather:wght@400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="BasicusLook.css"> 
+  <div class="static-overlay"></div>
 </head>
 <body>
+</div>
   <header>
     <h1>Carona Consciente</h1>
-    <h2>Participe agora!</h2> 
-    <p class="sub-titulo">Ajude a criar uma Sorocaba mais eficiente</p>
     <button class="ckr-saber" onclick="location.href='Saber.html'">
-  ⓘ Saiba mais
+      <!-- Love desu! (˶˃ ᵕ ˂˶) -->
+  ❤︎ Saiba mais ❤︎ 
 </button>
   </header>
 
@@ -21,9 +25,37 @@
 
   <footer>
     <div class="clickers">
+      <!-- onclick (ao clickar) location (local) href (local++ eu acho) -->
       <button class="ckr-login" onclick="location.href='Login.html'">Login</button>
       <button class="ckr-registro" onclick="location.href='Marker.html'">Registrar</button>
     </div>
   </footer>
+
+<script>
+  //Function (parada que quero hacer) Const (parada que quero usar vezes)
+  function RandomBackgroundDesu() {
+    const Rando = Math.random(); 
+    let ImagicusChoosen = "";
+
+    if (Rando < 0.40) {
+        ImagicusChoosen = 'DaBackground.webp';
+    } else if (Rando < 0.80) {
+        ImagicusChoosen = 'DaBackGround.webp';
+    } else if (Rando < 0.99) {
+        ImagicusChoosen = 'daBackGround.webp';
+    } else {
+        ImagicusChoosen = 'DaBackDaGround.webp';
+    }
+    const AllTheWay = `Keks_Und_Lols/${ImagicusChoosen}`;    
+
+    document.body.style.backgroundImage = `url('${AllTheWay}')`;
+  }
+  //Aqui fala quando vai rodar isso windows(window porra) onload (ao dar ze load)
+  window.onload = RandomBackgroundDesu;
+</script>
+
+
+
+
 </body>
 </html>

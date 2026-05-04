@@ -1,0 +1,90 @@
+body {
+    background-color: black;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed; 
+    
+    font-family: 'Montserrat', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 40px 20px;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+h1 {
+    margin: 0 0 50px 0; 
+    font-size: clamp(2.5rem, 8vw, 5rem); 
+    background: linear-gradient(180deg, #d40732, #94007e);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 450px; 
+}
+
+input {
+    padding: 20px 25px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    margin: 10px 0;    
+    width: 100%; 
+    box-sizing: border-box; 
+    font-size: 18px; 
+    transition: 0.3s;
+    background: linear-gradient(180deg, #d40732, #94007e);
+    color: #1aff1a;
+}
+
+input:focus {
+    border-color: #1aff1a;
+    outline: none;
+    box-shadow: 0 0 12px rgba(26, 255, 26, 0.3);
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between; 
+    gap: 30px; 
+    margin-top: 40px; 
+    width: 100%; 
+}
+
+button {
+    flex: 1; 
+    padding: 16px;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+}
+
+.ckr-marar {
+    background-color: #94007e;
+    color:#1aff1a;
+}
+
+.ckr-voltam {
+    background-color: #d40732;
+    color:#1aff1a;
+}   
+
+button:hover {
+    transform: translateY(-5px);
+    filter: brightness(1.2);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.5);
+}
+

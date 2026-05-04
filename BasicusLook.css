@@ -1,3 +1,5 @@
+/* YO não irei la notar los CSS das antique */
+
 body {
   font-family: 'Merriweather', serif;
   text-align: center;
@@ -5,9 +7,9 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: url('DaBackground.jpg') no-repeat center center fixed;
   background-size: cover;
   color: #ffffff;
+  background-color: black;
 }
 
 header, footer {
@@ -32,72 +34,74 @@ footer {
 main {
   flex-grow: 1;
 }
-
 h1 {
   font-family: 'Montserrat', sans-serif;
-  color: #ff0037; 
-  font-size: 64px; 
+  font-size: clamp(3rem, 8vw, 124px);
   margin: 0;
+  background: linear-gradient(180deg, #d40732, #94007e);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent; 
 }
 
-h2 {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 28px;
-  color: #ff0037;
-  margin: 10px 0 40px 0;
-}
-
-.sub-titulo {
-  font-size: 24px;
-  margin-top: 10px;
-  opacity: 0.8;
-}
 
 .clickers {
   display: flex;
   flex-direction: row; 
   justify-content: center;
-  gap: 20px;
+  gap: 10%;
 }
 
 .ckr-login, .ckr-registro {
-  width: 250px;
-  padding: 18px;
+  width: 100%;
+  max-width: 500px;
+  padding: 30px;
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
   transition: 0.3s;
   border: none;
-  font-size: 1.2rem;
+  font-size: clamp(1.5rem, 2.5vw, 3rem);
 }
 
-.ckr-login {
-  background-color: #b3062a;
-  color: #fff;
+  .ckr-login {
+    background-color: #d40732;
+    color: #1aff1a;
+
 }
 
-.ckr-login:hover {
-  background-color: #d40732; 
+  .ckr-registro {
+    background-color: #94007e;
+    color: #1aff1a;
+
 }
 
-.ckr-registro {
+.ckr-login:hover, .ckr-registro:hover {
+  transform: translateY(-12px);
+}
+
+.ckr-login:hover{
   background-color: #94007e;
-  color: #fff;
-  border: 1px solid rgba(255,255,255,0.2);
 }
+
+.ckr-registro:hover{
+  background-color: #d40732;
+}
+
 
 .ckr-saber {
   position: absolute;
   top: 20px;
   left: 20px;
   font-family: 'Montserrat', sans-serif; 
-  font-size: 14px; 
+  font-size: 21px; 
   font-weight: bold;
   text-transform: uppercase; 
   letter-spacing: 1px;
   
-  color: rgba(255, 255, 255, 0.6); 
-  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(26, 255, 26); 
+  background-color: rgb(212, 7, 50);
   
   padding: 8px 16px;
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -107,7 +111,8 @@ h2 {
 }
 
 .ckr-saber:hover {
-  color: #ffffff; 
-  background-color: rgba(255, 255, 255, 0.2);
-  border-color: #ff0037; 
+  color: #1aff1a; 
+  background-color: rgba(148, 0, 126);
 }
+
+

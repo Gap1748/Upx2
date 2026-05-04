@@ -1,0 +1,154 @@
+body{
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+}
+
+h1{
+    font-size: clamp(1.5rem, 2.5vw, 3rem);
+    background: linear-gradient(210deg, #d40732, #94007e);
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 1px;
+}
+
+.Toppin{
+    background-color: rgb(0, 0, 0, 0.5);
+    backdrop-filter: blur(30px);
+    border-radius: 35px;
+    border-right: 6px solid #d40732;
+    border-left: 6px solid #d40732;
+    width: 60%;
+    margin: 20px auto;
+    padding: 20px 0; 
+}
+
+h2{
+    font-size: clamp(0.9rem, 1.5vw, 1.5rem);
+    color: #1aff1a;
+    margin-bottom: 10px; 
+}
+
+p{
+    font-size: clamp(0.5rem, 1.5vw, 1rem);
+    color: #1aff1a;
+    max-width: 600px; 
+    margin: 10px auto; 
+    line-height: 1.6; 
+    text-align: center;
+}
+
+.btn-voltra {
+  background: rgba(148, 0, 126);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #1aff1a;
+  padding: 15px 40px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+  font-size: 21px;
+  width: clamp(100px, 30vw, 200px);
+  margin-left: 15px;
+  margin-top: 15px;
+  display: inline-block; 
+}
+
+.btn-voltra:hover {
+  background: #ff0037;
+  border-color: #ff0037;
+  color: #1aff1a;
+  transform: translateY(11px);
+}
+
+.btn-check {
+    background: linear-gradient(210deg, #d40732, #94007e);
+    border: none; 
+    color: white; 
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+    margin-top: 15px;  
+    opacity: 0.8;
+}
+
+.btn-check:hover {
+    opacity: 1;
+    transform: scale(2); /
+}
+
+.btn-check.lido {
+    background: #1aff1a; 
+    color: black;
+    opacity: 1;
+}
+
+.area-final {
+    margin: 50px 0; 
+    display: flex;
+    justify-content: center;
+}
+
+#btn-concluir {
+    background: linear-gradient(210deg, #d40732, #94007e);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 15px 40px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease; 
+    width: clamp(100px, 40vw, 300px);
+    display: block; 
+    margin: 0 auto;
+}
+
+#btn-concluir:not(.aguardando):hover {
+    filter: brightness(1.2);
+    transform: scale(1.6); 
+    box-shadow: 0 0 20px rgba(212, 7, 50, 0.8);
+}
+
+#btn-concluir.aguardando {
+    filter: grayscale(1) opacity(0.5); 
+    cursor: not-allowed;
+}
+
+#btn-concluir.aguardando:hover {
+    transform: none; 
+    filter: grayscale(1) opacity(0.5); 
+}
+
+/* MY CHILD!!! ITS LOOOCKED!!! */
+@keyframes shakeDesuwa {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(10px); }
+    50% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+    100% { transform: translateX(0); }
+}
+
+/* FREE HIIIM!!!! */
+.shake-erro {
+    animation: shakeDesuwa 0.4s ease-in-out;
+}
+
+.lista-termos {
+    list-style: none;
+    padding: 0;
+    margin: 10px auto;
+    max-width: 600px;
+    text-align: left;
+    color: #1aff1a;
+}
+
+.lista-termos li {
+    margin: 6px 0;
+}

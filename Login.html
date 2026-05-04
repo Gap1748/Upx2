@@ -9,21 +9,82 @@
 <body>
   <h1>
     <span>Login</span>
-    <button class="ckr-matar" onclick="location.href='matar.html'"></button>
   </h1>
 
   <form action="SUA_URL_DE_AUTENTICACAO_AQUI" method="POST">
     <div class="login-container">
-      <input type="text" name="ra" placeholder="Usuário (RA)" class="CunnyR" required>
+      <input type="email" name="email" placeholder="Email" required>
       <input type="password" name="senha" placeholder="Senha" class="CunnyS" required>
     </div>
 
     <main>
       <!--<button type="submit" class="ckr-mandar">Entrar</button>-->
-      <button type="button" class="ckr-mandar" onclick="location.href='StartZ.html'">Entrar</button>
+      <button type="button" class="ckr-mandar" id="btnEntrar">Entrar</button>
       <button type="button" class="ckr-voltar" onclick="location.href='Basicus.html'">Voltar</button>
     </main>
   </form>
+
+    <script>
+      async function login() {
+        //TEMPORÁRIOOOOOOOOOOOOOOOOOOOOOO
+        window.location.href = "StartZ.html"
+        const email = document.querySelector("[name='email']").value; 
+        const senha = document.querySelector("[name='senha']").value;
+
+      try {
+        const response = await fetch("http://localhost:8080/usuarios/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: email, 
+                senha: senha
+            })
+        });
+
+        if (!response.ok) {
+            alert("Login inválido");
+            return;
+        }
+
+        const usuario = await response.json();
+
+        // AGORA DEVE FUNCIONAR
+        localStorage.setItem("usuarioId", usuario.id);// usando o localstorage para guardar qual foi o id do usuario que fez 
+                                                      // o login para conseguir atribuir o cadastro de motorista ao usuario certo. FINALMENTE
+
+        alert("Login realizado!");
+
+        window.location.href = "StartZ.html";
+
+      } catch (error) {
+        console.error(error);
+        alert("Erro ao conectar com o servidor...");
+    }
+}
+
+//backgroudn kajajaro
+    function RandomBackgroundDesu() {
+    const Rando = Math.random(); 
+    let ImagicusChoosen = "";
+
+    if (Rando < 0.40) {
+        ImagicusChoosen = 'DaBackground.webp';
+    } else if (Rando < 0.80) {
+        ImagicusChoosen = 'DaBackGround.webp';
+    } else if (Rando < 0.99) {
+        ImagicusChoosen = 'daBackGround.webp';
+    } else {
+        ImagicusChoosen = 'DaBackDaGround.webp';
+    }
+    const AllTheWay = `Keks_Und_Lols/${ImagicusChoosen}`;    
+
+    document.body.style.backgroundImage = `url('${AllTheWay}')`;
+    }
+    document.getElementById("btnEntrar").addEventListener("click", login);
+    window.onload = RandomBackgroundDesu;
+</script>
 
 </body>
 </html>

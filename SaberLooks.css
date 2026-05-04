@@ -1,14 +1,14 @@
 body {
   font-family: 'Merriweather', serif;
   margin: 0;
-  background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('DaBackground.jpg') no-repeat center center fixed;
+  background-color: black;
   background-size: cover;
-  color: #ffffff;
+  color: #1aff1a;
   line-height: 1.6;
 }
 
 .container {
-  max-width: 1000px;
+  width: min(90%, 1000px);
   margin: 0 auto;
   padding: 20px 20px 60px 20px;
 }
@@ -18,29 +18,32 @@ body {
 }
 
 .btn-voltar {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(148, 0, 126);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
-  padding: 10px 20px;
+  color: #1aff1a;
+  padding:15px 40px;
   border-radius: 5px;
   cursor: pointer;
   font-family: 'Montserrat', sans-serif;
   font-weight: bold;
   transition: 0.3s;
+  font-size: 21px;
+  width: clamp(100px, 30vw, 200px);
 }
 
 .btn-voltar:hover {
   background: #ff0037;
   border-color: #ff0037;
+  color: #1aff1a;
 }
 
 .info-section {
-  margin-bottom: 40px;
+  margin-bottom: 30px;
   background: rgba(0, 0, 0, 0.4);
   padding: 40px;
   border-radius: 15px;
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-left: 6px solid #ff0037;
 }
 
@@ -112,6 +115,7 @@ footer {
   text-align: center;
   padding: 40px;
   opacity: 0.4;
-  font-size: 0.85rem;
+  font-size: 2rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
+

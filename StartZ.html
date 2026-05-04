@@ -2,105 +2,49 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StartZ - Seleção</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: white;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        h1 {
-            text-align: center;
-            margin: 20px;
-            font-size: 24px;
-            color: #333;
-        }
-
-        .selection-container {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            width: 90%;
-            flex-grow: 1;
-            margin-bottom: 20px;
-        }
-
-        .card {
-            flex: 1;
-            max-width: 450px;
-            height: 70vh; 
-            border: 5px solid #333;
-            border-radius: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: transform 0.3s, background-color 0.3s;
-            overflow: hidden;
-            background-color: #f9f9f9;
-        }
-
-        .card:hover {
-            transform: scale(1.02);
-            background-color: #f0f0f0;
-            border-color: #ff0000;
-        }
-
-        .card img {
-            max-width: 90%;
-            max-height: 90%;
-            object-fit: contain;
-        }
-
-        footer {
-            width: 100%;
-            padding: 20px 0;
-            display: flex;
-            justify-content: center;
-            background-color: white;
-        }
-
-        .ckr-voltas {
-            padding: 15px 40px;
-            font-size: 24px;
-            font-weight: bold;
-            text-transform: uppercase;
-            background-color: #333;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .ckr-voltas:hover {
-            background-color: #555;
-        }
-    </style>
+    <link rel="stylesheet" href="StartZLook.css">
 </head>
 <body>
 
-    <h1>Essa é a imouto (2/4) ela está te distraindo enquanto o site é produzido</h1>
-
-    <div class="selection-container">
-        <div class="card" onclick="alert('Vai ver 493168')">
-            <img src="imouto2.gif" alt="Opção 1">
+<!-- Cute and funny ( ˶˘ ³˘)♡ -->
+    <main class="selection-container">
+        <div class="card" onclick="location.href='motor1.html'">
+            <img src="Keks_Und_Lols/Car.png"Opção 1>
         </div>
 
-        <div class="card" onclick="alert('Vai ver 514655')">
-            <img src="imouto4.gif" alt="Opção 2">
+        <div class="card" onclick="location.href='SiteDesuwaaa.html'">
+            <img src="Keks_Und_Lols/CArs.jpg" alt="Opção 2">
         </div>
-    </div>
+    </main>
 
     <footer>
         <button class="ckr-voltas" onclick="location.href='Basicus.html'">Voltar</button>
     </footer>
+
+<script>
+  function RandomBackgroundDesu() {
+    const Rando = Math.random(); 
+    let ImagicusChoosen = "";
+
+    if (Rando < 0.40) {
+        ImagicusChoosen = 'DaBackground.webp';
+    } else if (Rando < 0.80) {
+        ImagicusChoosen = 'DaBackGround.webp';
+    } else if (Rando < 0.99) {
+        ImagicusChoosen = 'daBackGround.webp';
+    } else {
+        ImagicusChoosen = 'DaBackDaGround.webp';
+    }
+    const AllTheWay = `Keks_Und_Lols/${ImagicusChoosen}`;    
+
+    document.body.style.backgroundImage = `url('${AllTheWay}')`;
+  }
+
+  window.onload = RandomBackgroundDesu;
+</script>
 
 </body>
 </html>

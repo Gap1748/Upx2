@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="motor2Look.css">
+    <title>Dados do Veículo</title>
+</head>
+<body>
+    <h1><span>Dados do Veículo</span></h1>
+
+    <form id="formRegistre">
+        <input type="text" name="placa" id="placa" placeholder="Placa (ABC1D23)" maxlength="7" required>
+        <input type="text" name="marca"  placeholder="Marca (Ex: Subaru)" required>
+        <input type="text" name="modelo" placeholder="Modelo (Ex: WRX)" required>
+        <input type="text" name="cor"    placeholder="Cor do Veículo" required>
+        <input type="number" name="ano" id="ano" placeholder="Ano" min="-753" max="2077" required>
+        <div class="button-container">
+            <button type="submit" class="ckr-marar">Próximo</button>
+            <button type="button" class="ckr-voltam" onclick="location.href='motor1.html'">Voltar</button>
+        </div>
+    </form>
+
+    <script>
+        document.getElementById("formRegistre").addEventListener("submit", async function(e) {
+        e.preventDefault();
+
+        // pega dados da tela 1
+        const motorista = JSON.parse(localStorage.getItem("motorista"));
+
+        // dados da tela 2
+        const veiculo = {
+            placa: document.getElementById("placa").value,
+            marca: document.querySelector("[name='marca']").value,
+            modelo: document.querySelector("[name='modelo']").value,
+            cor: document.querySelector("[name='cor']").value,
+            ano: document.getElementById("ano").value
+        };
+
+        const usuarioId = localStorage.getItem("usuarioId");
+
+        //obs: as informações da segunda tela não estão indo para o banco por enquanto, vou alterar 
+        // a table depois, mas de resto esta pronto , só não vai mandar msm.
+        const dadosCompletos = { 
+            usuarioId: usuarioId,
+            cnh: motorista.cnh,
+            placa: veiculo.placa
+        };
+        // agora vai tentar jogar tudo na table
+
+        try {
+            const response = await fetch("http://localhost:8080/motoristas", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+            },
+                body: JSON.stringify(dadosCompletos)
+            });
+
+            if (response.ok) {
+                alert("Cadastro realizado com sucesso!");
+                localStorage.removeItem("motorista");
+                window.location.href = "SiteDesuwaaa.html";
+            } else {
+                alert("Erro ao cadastrar");
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Erro na conexão com o servidor");
+        }
+    });
+      function RandomBackgroundDesu() {
+    const Rando = Math.random(); 
+    let ImagicusChoosen = "";
+
+    if (Rando < 0.40) {
+        ImagicusChoosen = 'DaBackground.webp';
+    } else if (Rando < 0.80) {
+        ImagicusChoosen = 'DaBackGround.webp';
+    } else if (Rando < 0.99) {
+        ImagicusChoosen = 'daBackGround.webp';
+    } else {
+        ImagicusChoosen = 'DaBackDaGround.webp';
+    }
+    const AllTheWay = `Keks_Und_Lols/${ImagicusChoosen}`;    
+
+    document.body.style.backgroundImage = `url('${AllTheWay}')`;
+  }
+   window.onload = RandomBackgroundDesu;
+    </script>
+
+</body>
+</html>
