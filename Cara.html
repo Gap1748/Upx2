@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfil - Carona Consciente</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="CaraLooks.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <button class="btn-voltar" onclick="location.href='SiteDesu.html'">← Voltar</button>
+    <span class="site-title">CARONA CONSCIENTE</span>
+    <div class="navbar-spacer"></div>
+  </nav>
+
+  <main class="perfil-layout">
+
+    <!-- ===== COLUNA ESQUERDA: CARD DE IDENTIDADE ===== -->
+    <aside class="perfil-aside">
+
+      <!-- Avatar + nome + role -->
+      <div class="identity-card">
+        <div class="avatar-wrapper">
+          <div class="avatar-ring"></div>
+          <div class="avatar-img" id="avatarImg"></div>
+          <div class="avatar-status" title="Online"></div>
+        </div>
+        <h1 class="perfil-nome">Matheus Rodrigues Teixeira</h1>
+        <div class="perfil-badges">
+          <span class="badge motorista">🚗 Motorista</span>
+          <span class="badge passageiro">👤 Passageiro</span>
+        </div>
+        <p class="perfil-ra">RA: <strong>251791</strong></p>
+        <p class="perfil-membro-desde">Membro desde <strong>Março 2024</strong></p>
+      </div>
+
+      <!-- Estatísticas -->
+      <div class="stats-card">
+        <h3 class="stats-titulo">Estatísticas</h3>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <span class="stat-num">47</span>
+            <span class="stat-label">Caronas dadas</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num">31</span>
+            <span class="stat-label">Caronas pegas</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num">4.9</span>
+            <span class="stat-label">Avaliação</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num">~38 kg</span>
+            <span class="stat-label">CO₂ economizado</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Avaliações -->
+      <div class="avaliacoes-card">
+        <h3 class="stats-titulo">Avaliações recentes</h3>
+        <div class="avaliacao-item">
+          <span class="aval-stars">⭐⭐⭐⭐⭐</span>
+          <p class="aval-texto">"Pontual e muito educado, recomendo!"</p>
+          <span class="aval-autor">— Carlos Henrique, Mai/2026</span>
+        </div>
+        <div class="avaliacao-item">
+          <span class="aval-stars">⭐⭐⭐⭐⭐</span>
+          <p class="aval-texto">"Carro limpo, saída no horário certo."</p>
+          <span class="aval-autor">— Felipe Augusto, Abr/2026</span>
+        </div>
+        <div class="avaliacao-item">
+          <span class="aval-stars">⭐⭐⭐⭐☆</span>
+          <p class="aval-texto">"Ótimo motorista, só chegou 5 min atrasado."</p>
+          <span class="aval-autor">— Rafael M., Abr/2026</span>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ===== COLUNA DIREITA: DADOS ===== -->
+    <section class="perfil-dados">
+
+      <!-- Header da seção com botão de editar -->
+      <div class="dados-header">
+        <h2>Informações do Perfil</h2>
+        <button class="btn-editar" onclick="mostrarToast()">✏️ Alterar Perfil</button>
+      </div>
+
+      <!-- DADOS PESSOAIS -->
+      <div class="dados-grupo">
+        <div class="grupo-titulo">
+          <span class="grupo-icon">👤</span>
+          <span>Dados Pessoais</span>
+        </div>
+        <div class="campos-grid">
+          <div class="campo">
+            <label>Nome completo</label>
+            <div class="campo-valor">Matheus Rodrigues Teixeira</div>
+          </div>
+          <div class="campo">
+            <label>E-mail</label>
+            <div class="campo-valor">matheus.teixeira@facens.edu.br</div>
+          </div>
+          <div class="campo">
+            <label>Telefone</label>
+            <div class="campo-valor">(15) 99812-3456</div>
+          </div>
+          <div class="campo">
+            <label>Data de nascimento</label>
+            <div class="campo-valor">14/08/2003</div>
+          </div>
+          <div class="campo campo-full">
+            <label>Endereço</label>
+            <div class="campo-valor">Av. Dr. Afonso Vergueiro, 823 — Centro, Sorocaba/SP — CEP 18035-370</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DADOS ACADÊMICOS -->
+      <div class="dados-grupo">
+        <div class="grupo-titulo">
+          <span class="grupo-icon">🎓</span>
+          <span>Dados Acadêmicos</span>
+        </div>
+        <div class="campos-grid">
+          <div class="campo">
+            <label>RA (Registro Acadêmico)</label>
+            <div class="campo-valor">251791</div>
+          </div>
+          <div class="campo">
+            <label>Curso</label>
+            <div class="campo-valor">Análise e Desenvolvimento de Sistemas</div>
+          </div>
+          <div class="campo">
+            <label>Semestre</label>
+            <div class="campo-valor">2º Semestre</div>
+          </div>
+          <div class="campo">
+            <label>Turno</label>
+            <div class="campo-valor">Noite</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DOCUMENTOS (dados sensíveis mascarados) -->
+      <div class="dados-grupo">
+        <div class="grupo-titulo">
+          <span class="grupo-icon">🔒</span>
+          <span>Documentos e Segurança</span>
+        </div>
+        <div class="campos-grid">
+          <div class="campo">
+            <label>CPF</label>
+            <div class="campo-valor campo-sensivel">
+              <span class="valor-mascarado" id="cpfVal">•••.•••.•••-••</span>
+              <button class="btn-reveal" onclick="revelarCampo('cpfVal', '042.853.197-66')">👁</button>
+            </div>
+          </div>
+          <div class="campo">
+            <label>Senha</label>
+            <div class="campo-valor campo-sensivel">
+              <span class="valor-mascarado" id="senhaVal">••••••••••••</span>
+              <button class="btn-reveal" onclick="revelarCampo('senhaVal', '************')">👁</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DADOS DO MOTORISTA -->
+      <div class="dados-grupo motorista-grupo">
+        <div class="grupo-titulo">
+          <span class="grupo-icon">🚗</span>
+          <span>Dados de Motorista</span>
+          <span class="grupo-badge">Motorista ativo</span>
+        </div>
+        <div class="campos-grid">
+          <div class="campo">
+            <label>CNH</label>
+            <div class="campo-valor campo-sensivel">
+              <span class="valor-mascarado" id="cnhVal">•••••••••••</span>
+              <button class="btn-reveal" onclick="revelarCampo('cnhVal', '04812365790')">👁</button>
+            </div>
+          </div>
+          <div class="campo">
+            <label>Categoria CNH</label>
+            <div class="campo-valor">B</div>
+          </div>
+          <div class="campo">
+            <label>Validade CNH</label>
+            <div class="campo-valor">12/08/2029</div>
+          </div>
+          <div class="campo">
+            <label>Placa do veículo</label>
+            <div class="campo-valor placa">ABC-1D23</div>
+          </div>
+          <div class="campo">
+            <label>Veículo</label>
+            <div class="campo-valor">Subaru WRX STI</div>
+          </div>
+          <div class="campo">
+            <label>Ano</label>
+            <div class="campo-valor">2023</div>
+          </div>
+          <div class="campo campo-full">
+            <label>Descrição / Cor</label>
+            <div class="campo-valor">
+              <div class="carro-desc">
+                <div class="carro-cor" style="background: #1a1a2e;" title="Azul WR"></div>
+                <span>Azul WR · 4 portas · Ar condicionado · Bancos esportivos · 4 vagas disponíveis</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Disponibilidade resumida -->
+        <div class="disponibilidade-resumo">
+          <span class="disp-label">Disponibilidade:</span>
+          <div class="disp-dias">
+            <span class="dia ativo">Seg</span>
+            <span class="dia ativo">Ter</span>
+            <span class="dia ativo">Qua</span>
+            <span class="dia ativo">Qui</span>
+            <span class="dia ativo">Sex</span>
+            <span class="dia">Sáb</span>
+            <span class="dia">Dom</span>
+          </div>
+          <div class="disp-horarios">
+            <span>🕖 Ida: 19h00 · Av. Dr. Afonso Vergueiro, 1300</span>
+            <span>🕛 Volta: 23h00 · Facens</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PREFERÊNCIAS -->
+      <div class="dados-grupo">
+        <div class="grupo-titulo">
+          <span class="grupo-icon">⚙️</span>
+          <span>Preferências</span>
+        </div>
+        <div class="prefs-grid">
+          <div class="pref-item">
+            <span class="pref-icon">🔔</span>
+            <div class="pref-info">
+              <strong>Notificações de carona</strong>
+              <span>Avisos de confirmação e cancelamento</span>
+            </div>
+            <div class="pref-toggle ativo"></div>
+          </div>
+          <div class="pref-item">
+            <span class="pref-icon">💬</span>
+            <div class="pref-info">
+              <strong>Mensagens diretas</strong>
+              <span>Permitir contato de outros usuários</span>
+            </div>
+            <div class="pref-toggle ativo"></div>
+          </div>
+          <div class="pref-item">
+            <span class="pref-icon">📍</span>
+            <div class="pref-info">
+              <strong>Mostrar endereço exato</strong>
+              <span>Exibir endereço completo para passageiros</span>
+            </div>
+            <div class="pref-toggle"></div>
+          </div>
+          <div class="pref-item">
+            <span class="pref-icon">📧</span>
+            <div class="pref-info">
+              <strong>E-mails de resumo semanal</strong>
+              <span>Receber resumo de caronas por e-mail</span>
+            </div>
+            <div class="pref-toggle ativo"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ZONA DE PERIGO -->
+      <div class="dados-grupo danger-grupo">
+        <div class="grupo-titulo">
+          <span class="grupo-icon">⚠️</span>
+          <span>Zona de Perigo</span>
+        </div>
+        <div class="danger-btns">
+          <button class="btn-danger-outline" onclick="mostrarToast()">Desativar conta temporariamente</button>
+          <button class="btn-danger-solid" onclick="mostrarToast()">Excluir conta permanentemente</button>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- TOAST de "em breve" -->
+  <div class="toast" id="toast">🚧 Funcionalidade em desenvolvimento!</div>
+
+  <footer>
+    <p>&copy; 2026 Carona Consciente - Sorocaba/SP</p>
+  </footer>
+
+  <script>
+    // ===== FUNDO ALEATÓRIO =====
+    function RandomBackgroundDesu() {
+      const Rando = Math.random();
+      let ImagicusChoosen = "";
+      if (Rando < 0.40) {
+        ImagicusChoosen = 'DaBackground.webp';
+      } else if (Rando < 0.80) {
+        ImagicusChoosen = 'daBackGround.webp';
+      } else if (Rando < 0.99) {
+        ImagicusChoosen = 'DaBackGround.webp';
+      } else {
+        ImagicusChoosen = 'DaBackDaGround.webp';
+      }
+      document.body.style.backgroundImage = `url('Keks_Und_Lols/${ImagicusChoosen}')`;
+    }
+
+    // ===== REVELAR CAMPO SENSÍVEL =====
+    const valoresOriginais = {};
+
+    function revelarCampo(id, valor) {
+      const span = document.getElementById(id);
+      const btn = span.nextElementSibling;
+      if (span.dataset.revelado === 'true') {
+        span.textContent = span.dataset.mascara;
+        span.dataset.revelado = 'false';
+        btn.textContent = '👁';
+        span.classList.add('valor-mascarado');
+      } else {
+        span.dataset.mascara = span.textContent;
+        span.textContent = valor;
+        span.dataset.revelado = 'true';
+        btn.textContent = '🙈';
+        span.classList.remove('valor-mascarado');
+      }
+    }
+
+    // ===== TOAST =====
+    function mostrarToast() {
+      const toast = document.getElementById('toast');
+      toast.classList.add('ativo');
+      setTimeout(() => toast.classList.remove('ativo'), 2800);
+    }
+
+    // ===== TOGGLES DE PREFERÊNCIA (visual apenas) =====
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('pref-toggle')) {
+        e.target.classList.toggle('ativo');
+      }
+    });
+
+    // ===== ANIMAÇÃO DE ENTRADA DOS GRUPOS =====
+    function animarEntrada() {
+      const grupos = document.querySelectorAll('.dados-grupo, .identity-card, .stats-card, .avaliacoes-card');
+      grupos.forEach((el, i) => {
+        el.style.animationDelay = `${i * 0.07}s`;
+        el.classList.add('animar');
+      });
+    }
+
+    window.onload = function() {
+      RandomBackgroundDesu();
+      animarEntrada();
+    };
+  </script>
+</body>
+</html>

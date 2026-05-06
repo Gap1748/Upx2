@@ -1,0 +1,717 @@
+/* ===========================
+   CaraLooks.css
+   Carona Consciente — Página de Perfil
+   Paleta: #1aff1a (verde), #ff0037 (vermelho), rgba(148,0,126) (roxo)
+=========================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Merriweather', serif;
+  background-color: #000;
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  color: #1aff1a;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===========================
+   NAVBAR
+=========================== */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 28px;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.site-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  font-size: 1.05rem;
+  color: #ff0037;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.navbar-spacer {
+  width: 120px; /* equilibra o botão voltar */
+}
+
+.btn-voltar {
+  background: rgba(148, 0, 126, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #1aff1a;
+  padding: 10px 22px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+  font-size: 0.85rem;
+  transition: 0.3s;
+}
+
+.btn-voltar:hover {
+  background: #ff0037;
+  border-color: #ff0037;
+}
+
+/* ===========================
+   LAYOUT
+=========================== */
+.perfil-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 24px;
+  padding: 28px 32px 40px;
+  flex: 1;
+  max-width: 1300px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ===========================
+   ASIDE ESQUERDA
+=========================== */
+.perfil-aside {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Identity card */
+.identity-card {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-top: 4px solid #ff0037;
+  border-radius: 14px;
+  padding: 32px 24px 28px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Avatar */
+.avatar-wrapper {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  margin-bottom: 8px;
+}
+
+.avatar-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: conic-gradient(#ff0037, #94007e, #1aff1a, #ff0037);
+  animation: girarRing 4s linear infinite;
+}
+
+@keyframes girarRing {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.avatar-img {
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff0037 0%, #94007e 100%);
+  border: 3px solid #000;
+  z-index: 1;
+}
+
+.avatar-status {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  width: 14px;
+  height: 14px;
+  background: #1aff1a;
+  border-radius: 50%;
+  border: 2px solid #000;
+  z-index: 2;
+  box-shadow: 0 0 8px rgba(26, 255, 26, 0.7);
+}
+
+.perfil-nome {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.3;
+}
+
+.perfil-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.badge {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.badge.motorista {
+  background: rgba(148, 0, 126, 0.3);
+  border: 1px solid rgba(148, 0, 126, 0.6);
+  color: #d070cc;
+}
+
+.badge.passageiro {
+  background: rgba(255, 0, 55, 0.15);
+  border: 1px solid rgba(255, 0, 55, 0.4);
+  color: #ff6688;
+}
+
+.perfil-ra {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.perfil-ra strong { color: #1aff1a; }
+
+.perfil-membro-desde {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.perfil-membro-desde strong { color: rgba(255,255,255,0.6); }
+
+/* Stats card */
+.stats-card, .avaliacoes-card {
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 14px;
+  padding: 22px 20px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.stats-titulo {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+}
+
+.stat-num {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #ff0037;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.4);
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Avaliações */
+.avaliacao-item {
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.avaliacao-item:last-child { border-bottom: none; }
+
+.aval-stars { font-size: 0.75rem; }
+
+.aval-texto {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.aval-autor {
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.3);
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* ===========================
+   COLUNA DIREITA — DADOS
+=========================== */
+.perfil-dados {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  overflow-y: auto;
+}
+
+/* Header com botão editar */
+.dados-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 4px;
+}
+
+.dados-header h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: #ff0037;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.btn-editar {
+  background: rgba(148, 0, 126, 0.45);
+  border: 1px solid rgba(148, 0, 126, 0.6);
+  color: #1aff1a;
+  padding: 10px 22px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: 0.3s;
+}
+
+.btn-editar:hover {
+  background: #ff0037;
+  border-color: #ff0037;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 0, 55, 0.3);
+}
+
+/* Grupos de dados */
+.dados-grupo {
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 14px;
+  padding: 24px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-left: 5px solid rgba(255, 0, 55, 0.6);
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.dados-grupo.animar {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.motorista-grupo {
+  border-left-color: rgba(148, 0, 126, 0.8);
+}
+
+.danger-grupo {
+  border-left-color: rgba(255, 0, 55, 0.9);
+  background: rgba(255, 0, 55, 0.04);
+}
+
+.grupo-titulo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.grupo-icon { font-size: 1rem; }
+
+.grupo-badge {
+  margin-left: auto;
+  background: rgba(148, 0, 126, 0.25);
+  border: 1px solid rgba(148, 0, 126, 0.5);
+  color: #d070cc;
+  font-size: 0.65rem;
+  padding: 2px 10px;
+  border-radius: 20px;
+}
+
+/* Grid de campos */
+.campos-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.campo-full {
+  grid-column: 1 / -1;
+}
+
+.campo label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.campo-valor {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 7px;
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.82);
+  font-family: 'Merriweather', serif;
+  line-height: 1.5;
+}
+
+/* Campo sensível */
+.campo-sensivel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.valor-mascarado {
+  letter-spacing: 3px;
+  color: rgba(255, 255, 255, 0.4);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.88rem;
+}
+
+.btn-reveal {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+  padding: 2px;
+  flex-shrink: 0;
+}
+
+.btn-reveal:hover { opacity: 1; }
+
+/* Placa especial */
+.placa {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 900;
+  color: #1aff1a;
+  letter-spacing: 3px;
+  border-color: rgba(26, 255, 26, 0.2);
+}
+
+/* Carro descrição */
+.carro-desc {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.carro-cor {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+/* Disponibilidade motorista */
+.disponibilidade-resumo {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.disp-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.disp-dias {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.dia {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.dia.ativo {
+  background: rgba(148, 0, 126, 0.25);
+  border-color: rgba(148, 0, 126, 0.5);
+  color: #d070cc;
+}
+
+.disp-horarios {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.disp-horarios span {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* ===========================
+   PREFERÊNCIAS
+=========================== */
+.prefs-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pref-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.pref-item:last-child { border-bottom: none; }
+
+.pref-icon { font-size: 1.1rem; flex-shrink: 0; }
+
+.pref-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pref-info strong {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.pref-info span {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* Toggle visual de preferências */
+.pref-toggle {
+  width: 42px;
+  height: 22px;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  position: relative;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  flex-shrink: 0;
+}
+
+.pref-toggle::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s;
+}
+
+.pref-toggle.ativo {
+  background: rgba(148, 0, 126, 0.55);
+  border-color: rgba(148, 0, 126, 0.7);
+}
+
+.pref-toggle.ativo::after {
+  transform: translateX(20px);
+  background: #fff;
+}
+
+/* ===========================
+   ZONA DE PERIGO
+=========================== */
+.danger-btns {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.btn-danger-outline {
+  background: transparent;
+  border: 1px solid rgba(255, 0, 55, 0.5);
+  color: #ff0037;
+  padding: 10px 20px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: 0.2s;
+}
+
+.btn-danger-outline:hover {
+  background: rgba(255, 0, 55, 0.12);
+  border-color: #ff0037;
+}
+
+.btn-danger-solid {
+  background: rgba(255, 0, 55, 0.2);
+  border: 1px solid rgba(255, 0, 55, 0.6);
+  color: #ff0037;
+  padding: 10px 20px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: 0.2s;
+}
+
+.btn-danger-solid:hover {
+  background: #ff0037;
+  color: #fff;
+}
+
+/* ===========================
+   TOAST
+=========================== */
+.toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: rgba(10, 10, 10, 0.92);
+  border: 1px solid rgba(148, 0, 126, 0.6);
+  border-left: 4px solid #ff0037;
+  color: #fff;
+  padding: 14px 28px;
+  border-radius: 10px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  backdrop-filter: blur(16px);
+  z-index: 9999;
+  opacity: 0;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease;
+  white-space: nowrap;
+}
+
+.toast.ativo {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* ===========================
+   ANIMAÇÃO DE ENTRADA
+=========================== */
+.identity-card, .stats-card, .avaliacoes-card {
+  opacity: 0;
+  transform: translateX(-12px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.identity-card.animar, .stats-card.animar, .avaliacoes-card.animar {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ===========================
+   FOOTER
+=========================== */
+footer {
+  text-align: center;
+  padding: 22px;
+  opacity: 0.3;
+  font-size: 0.78rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* ===========================
+   SCROLLBAR
+=========================== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.12); border-radius: 6px; }

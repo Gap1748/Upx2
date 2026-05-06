@@ -45,7 +45,7 @@
           <p>UX Researcher</p>
         </div>
     <!-- EU (˶˃ ᵕ ˂˶) .ᐟ.ᐟ-->
-        <div class="team-card secret-member" onclick="location.href='Cunny.html'">
+          <div class="team-card secret-member" onclick="abrirEasterEgg()">
           <div class="avatar"></div>
           <h3>Matheus Rodrigues Teixeira</h3>
           <p>Lead Software Engineer & PO</p>
@@ -90,6 +90,25 @@
   }
 
   window.onload = RandomBackgroundDesu;
+   
+  function abrirEasterEgg() {
+      // Pequeno delay antes de redirecionar — dificulta curiosos que clicam sem querer
+      const clicks = parseInt(sessionStorage.getItem('egg_clicks') || '0') + 1;
+      sessionStorage.setItem('egg_clicks', clicks);
+
+      // Só redireciona se clicar 2x no card (duplo clique "acidental" vira intencional)
+      if (clicks >= 2) {
+        sessionStorage.removeItem('egg_clicks');
+        location.href = 'Cunny.html';
+      } else {
+        // Na primeira vez, o card treme levemente mas não vai a lugar nenhum
+        const card = document.querySelector('.secret-member');
+        card.style.transition = 'transform 0.15s ease';
+        card.style.transform = 'scale(0.97)';
+        setTimeout(() => { card.style.transform = ''; }, 200);
+      }
+    }
+
   </script>
 
 </body>

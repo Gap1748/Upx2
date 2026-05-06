@@ -1,0 +1,967 @@
+ <!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Carona Consciente - Painel</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="SiteDesuLooks.css">
+
+</head>
+
+<body>
+
+
+<!-- ===== NAVBAR ===== -->
+
+<nav class="navbar">
+
+<div class="navbar-left">
+
+<!-- Foto de perfil clicável -->
+
+<div class="profile-bubble" onclick="location.href='Cara.html'" title="Ver perfil">
+
+<div class="profile-avatar"></div>
+
+<div class="profile-info">
+
+<span class="profile-name">Matheus R. Teixeira</span>
+
+<span class="profile-role" id="profileRoleTag">Motorista</span>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="navbar-center">
+
+<span class="site-title">CARONA CONSCIENTE</span>
+
+</div>
+
+
+<div class="navbar-right">
+
+<!-- Toggle Motorista / Passageiro -->
+
+<div class="mode-toggle">
+
+<span class="toggle-label" id="labelPassageiro">Passageiro</span>
+
+<div class="toggle-track" id="toggleTrack" onclick="alternarModo()">
+
+<div class="toggle-thumb" id="toggleThumb"></div>
+
+</div>
+
+<span class="toggle-label" id="labelMotorista">Motorista</span>
+
+</div>
+
+<button class="btn-voltar" onclick="location.href='Basicus.html'">← Voltar</button>
+
+</div>
+
+</nav>
+
+
+<!-- ===== LAYOUT PRINCIPAL ===== -->
+
+<div class="main-layout">
+
+
+<!-- ===== COLUNA ESQUERDA: CHAT ===== -->
+
+<aside class="sidebar-chat">
+
+<div class="chat-header">
+
+<h2>Mensagens</h2>
+
+</div>
+
+
+<!-- Lista de contatos -->
+
+<div class="chat-contacts">
+
+<!-- Suporte -->
+
+<div class="contact-item active" onclick="abrirChat('suporte')">
+
+<div class="contact-avatar suporte-avatar">🛟</div>
+
+<div class="contact-info">
+
+<span class="contact-name">Suporte</span>
+
+<span class="contact-preview">Olá! Como posso ajudar?</span>
+
+</div>
+
+<span class="contact-badge">1</span>
+
+</div>
+
+
+<!-- Motorista -->
+
+<div class="contact-item" onclick="abrirChat('alan')">
+
+<div class="contact-avatar motorista-avatar">🚗</div>
+
+<div class="contact-info">
+
+<span class="contact-name">Lucas F. <small>(motorista)</small></span>
+
+<span class="contact-preview">Saio às 7h da Av. Brasil</span>
+
+</div>
+
+</div>
+
+
+<!-- Passageiro -->
+
+<div class="contact-item" onclick="abrirChat('joao')">
+
+<div class="contact-avatar passageiro-avatar">👤</div>
+
+<div class="contact-info">
+
+<span class="contact-name">Carlos H. <small>(passageiro)</small></span>
+
+<span class="contact-preview">Confirmado para sexta!</span>
+
+</div>
+
+<span class="contact-badge">2</span>
+
+</div>
+
+
+<!-- Motorista -->
+
+<div class="contact-item" onclick="abrirChat('gabriel')">
+
+<div class="contact-avatar motorista-avatar">🚗</div>
+
+<div class="contact-info">
+
+<span class="contact-name">Rafael M. <small>(motorista)</small></span>
+
+<span class="contact-preview">Tudo certo pra segunda!</span>
+
+</div>
+
+</div>
+
+
+<!-- Suporte -->
+
+<div class="contact-item" onclick="abrirChat('bot')">
+
+<div class="contact-avatar suporte-avatar">🤖</div>
+
+<div class="contact-info">
+
+<span class="contact-name">Assistente CC</span>
+
+<span class="contact-preview">Posso ajudar a encontrar...</span>
+
+</div>
+
+</div>
+
+
+<!-- Passageiro -->
+
+<div class="contact-item" onclick="abrirChat('pedro')">
+
+<div class="contact-avatar passageiro-avatar">👤</div>
+
+<div class="contact-info">
+
+<span class="contact-name">Felipe A. <small>(passageiro)</small></span>
+
+<span class="contact-preview">Pode me deixar na entrada?</span>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- Área de chat ativa -->
+
+<div class="chat-window">
+
+<div class="chat-messages" id="chatMessages">
+
+<div class="msg-received">
+
+<span>Olá! Sou o suporte do Carona Consciente. Como posso te ajudar hoje? 😊</span>
+
+</div>
+
+<div class="msg-sent">
+
+<span>Oi! Queria saber como confirmar minha carona de amanhã</span>
+
+</div>
+
+<div class="msg-received">
+
+<span>Claro! Basta clicar no dia no calendário e confirmar o evento. Qualquer dúvida estou aqui! </span>
+
+</div>
+
+</div>
+
+<div class="chat-input-area">
+
+<input type="text" class="chat-input" id="chatInput" placeholder="Digite uma mensagem..." onkeypress="enviarMsg(event)">
+
+<button class="chat-send-btn" onclick="enviarMsgBotao()">➤</button>
+
+</div>
+
+</div>
+
+</aside>
+
+
+<!-- ===== COLUNA DIREITA: CALENDÁRIO + PAINEL ===== -->
+
+<main class="main-content">
+
+
+<!-- AVISO DO DIA -->
+
+<div class="aviso-dia" id="avisoDia">
+
+<span class="aviso-icon">📍</span>
+
+<span id="avisoTexto">Hoje você pegará carona com <strong>Lucas F.</strong> na <strong>Av. Dr. Afonso Vergueiro, 1300</strong> às <strong>7h00</strong></span>
+
+</div>
+
+
+<!-- CALENDÁRIO -->
+
+<section class="calendario-section">
+
+<div class="calendario-header">
+
+<button class="cal-nav-btn" onclick="mudarMes(-1)">‹</button>
+
+<h2 class="cal-titulo" id="calTitulo"></h2>
+
+<button class="cal-nav-btn" onclick="mudarMes(1)">›</button>
+
+</div>
+
+
+<div class="calendario-grid">
+
+<!-- Dias da semana -->
+
+<div class="cal-weekday">Dom</div>
+
+<div class="cal-weekday">Seg</div>
+
+<div class="cal-weekday">Ter</div>
+
+<div class="cal-weekday">Qua</div>
+
+<div class="cal-weekday">Qui</div>
+
+<div class="cal-weekday">Sex</div>
+
+<div class="cal-weekday">Sáb</div>
+
+<!-- Dias preenchidos via JS -->
+
+</div>
+
+</section>
+
+
+<!-- PAINEL LATERAL VARIÁVEL (muda com toggle) -->
+
+<!-- PAINEL MOTORISTA -->
+
+<section class="painel-modo" id="painelMotorista">
+
+<h2>🚗 Minha Disponibilidade</h2>
+
+<div class="disponibilidade-form">
+
+<div class="form-row">
+
+<label>Dias disponíveis:</label>
+
+<div class="dias-semana-check">
+
+<label><input type="checkbox" checked> Seg</label>
+
+<label><input type="checkbox" checked> Ter</label>
+
+<label><input type="checkbox" checked> Qua</label>
+
+<label><input type="checkbox" checked> Qui</label>
+
+<label><input type="checkbox" checked> Sex</label>
+
+<label><input type="checkbox"> Sáb</label>
+
+<label><input type="checkbox"> Dom</label>
+
+</div>
+
+</div>
+
+<div class="form-row">
+
+<label>Ponto de partida:</label>
+
+<input type="text" class="form-input" placeholder="Ex: Av. Dr. Afonso Vergueiro, 1300 - Centro">
+
+</div>
+
+<div class="form-row">
+
+<label>Horário de saída (ida):</label>
+
+<input type="time" class="form-input" value="19:00">
+
+</div>
+
+<div class="form-row">
+
+<label>Horário de saída (volta):</label>
+
+<input type="time" class="form-input" value="23:00">
+
+</div>
+
+<div class="form-row">
+
+<label>Vagas disponíveis:</label>
+
+<select class="form-input">
+
+<option>1 vaga</option>
+
+<option selected>2 vagas</option>
+
+<option>3 vagas</option>
+
+<option>4 vagas</option>
+
+</select>
+
+</div>
+
+<button class="btn-salvar">Salvar Disponibilidade</button>
+
+</div>
+
+
+<div class="passageiros-confirmados">
+
+<h3>Passageiros Confirmados</h3>
+
+<div class="passageiro-item">
+
+<div class="pass-avatar">👤</div>
+
+<div class="pass-info">
+
+<strong>Carlos Henrique</strong>
+
+<span>Seg a Sex · Ida + Volta</span>
+
+</div>
+
+<span class="pass-status confirmado">✓</span>
+
+</div>
+
+<div class="passageiro-item">
+
+<div class="pass-avatar">👤</div>
+
+<div class="pass-info">
+
+<strong>Felipe Augusto</strong>
+
+<span>Seg, Qua, Sex · Só ida</span>
+
+</div>
+
+<span class="pass-status confirmado">✓</span>
+
+</div>
+
+<div class="passageiro-item">
+
+<div class="pass-avatar">👤</div>
+
+<div class="pass-info">
+
+<strong>Thiago B.</strong>
+
+<span>Ter e Qui · Só volta</span>
+
+</div>
+
+<span class="pass-status pendente">⏳</span>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- PAINEL PASSAGEIRO -->
+
+<section class="painel-modo" id="painelPassageiro" style="display:none;">
+
+<h2>🔍 Buscar Carona</h2>
+
+<div class="busca-form">
+
+<div class="form-row">
+
+<label>Bairro / Ponto de embarque:</label>
+
+<input type="text" class="form-input" placeholder="Ex: Centro, Éden, Cajuru...">
+
+</div>
+
+<div class="form-row">
+
+<label>Período:</label>
+
+<div class="periodo-btns">
+
+<button class="periodo-btn active">Ida</button>
+
+<button class="periodo-btn">Volta</button>
+
+<button class="periodo-btn">Ida + Volta</button>
+
+</div>
+
+</div>
+
+<button class="btn-buscar">Buscar Caronas</button>
+
+</div>
+
+
+<div class="resultados-carona">
+
+<h3>Caronas Disponíveis</h3>
+
+
+<div class="carona-card">
+
+<div class="carona-motorista">
+
+<div class="carona-avatar">🚗</div>
+
+<div>
+
+<strong>Lucas Ferreira</strong>
+
+<span class="carona-rating">⭐ 4.9</span>
+
+</div>
+
+</div>
+
+<div class="carona-detalhes">
+
+<span>📍 Av. Dr. Afonso Vergueiro, 1300 — Centro</span>
+
+<span>🕖 Saída: 19h00 · Volta: 23h00</span>
+
+<span>📅 Seg a Sex</span>
+
+<span class="vagas-badge">2 vagas livres</span>
+
+</div>
+
+<button class="btn-agendar">Agendar</button>
+
+</div>
+
+
+<div class="carona-card">
+
+<div class="carona-motorista">
+
+<div class="carona-avatar">🚗</div>
+
+<div>
+
+<strong>Rafael Marques</strong>
+
+<span class="carona-rating">⭐ 4.7</span>
+
+</div>
+
+</div>
+
+<div class="carona-detalhes">
+
+<span>📍 R. das Flores, 88 — Éden</span>
+
+<span>🕖 Saída: 19h00 · Volta: 23h00</span>
+
+<span>📅 Ter, Qui e Sex</span>
+
+<span class="vagas-badge">1 vaga livre</span>
+
+</div>
+
+<button class="btn-agendar">Agendar</button>
+
+</div>
+
+
+<div class="carona-card sem-vagas">
+
+<div class="carona-motorista">
+
+<div class="carona-avatar">🚗</div>
+
+<div>
+
+<strong>Felipe Augusto</strong>
+
+<span class="carona-rating">⭐ 4.5</span>
+
+</div>
+
+</div>
+
+<div class="carona-detalhes">
+
+<span>📍 Av. Independência, 45 — Cajuru</span>
+
+<span>🕖 Saída: 19h00 · Volta: 23h15</span>
+
+<span>📅 Seg a Sex</span>
+
+<span class="vagas-badge lotado">Lotado</span>
+
+</div>
+
+<button class="btn-agendar" disabled>Lotado</button>
+
+</div>
+
+</div>
+
+</section>
+
+
+</main>
+
+</div>
+
+
+<!-- MODAL: Detalhe do dia -->
+
+<div class="modal-overlay" id="modalOverlay" onclick="fecharModal()">
+
+<div class="modal-box" onclick="event.stopPropagation()">
+
+<button class="modal-close" onclick="fecharModal()">✕</button>
+
+<h3 id="modalTitulo">Dia 00/00</h3>
+
+<div id="modalConteudo"></div>
+
+</div>
+
+</div>
+
+
+<footer>
+
+<p>&copy; 2026 Carona Consciente - Sorocaba/SP</p>
+
+</footer>
+
+
+<script>
+
+// ===== FUNDO ALEATÓRIO =====
+
+function RandomBackgroundDesu() {
+
+const Rando = Math.random();
+
+let ImagicusChoosen = "";
+
+if (Rando < 0.40) {
+
+ImagicusChoosen = 'DaBackground.webp';
+
+} else if (Rando < 0.80) {
+
+ImagicusChoosen = 'daBackGround.webp';
+
+} else if (Rando < 0.99) {
+
+ImagicusChoosen = 'DaBackGround.webp';
+
+} else {
+
+ImagicusChoosen = 'DaBackDaGround.webp';
+
+}
+
+const AllTheWay = `Keks_Und_Lols/${ImagicusChoosen}`;
+
+document.body.style.backgroundImage = `url('${AllTheWay}')`;
+
+}
+
+
+// ===== TOGGLE MODO =====
+
+let modoMotorista = true;
+
+
+function alternarModo() {
+
+modoMotorista = !modoMotorista;
+
+const thumb = document.getElementById('toggleThumb');
+
+const track = document.getElementById('toggleTrack');
+
+const roleTag = document.getElementById('profileRoleTag');
+
+
+if (modoMotorista) {
+
+thumb.style.transform = 'translateX(26px)';
+
+track.style.background = 'rgba(148, 0, 126, 0.6)';
+
+roleTag.textContent = 'Motorista';
+
+roleTag.style.background = 'rgba(148,0,126,0.4)';
+
+document.getElementById('painelMotorista').style.display = 'block';
+
+document.getElementById('painelPassageiro').style.display = 'none';
+
+document.getElementById('avisoTexto').innerHTML = 'Hoje você tem <strong>3 passageiros</strong> confirmados. Saída às <strong>7h00</strong> da <strong>Av. Dr. Afonso Vergueiro, 1300</strong>';
+
+} else {
+
+thumb.style.transform = 'translateX(0px)';
+
+track.style.background = 'rgba(255, 0, 55, 0.4)';
+
+roleTag.textContent = 'Passageiro';
+
+roleTag.style.background = 'rgba(255,0,55,0.25)';
+
+document.getElementById('painelMotorista').style.display = 'none';
+
+document.getElementById('painelPassageiro').style.display = 'block';
+
+document.getElementById('avisoTexto').innerHTML = 'Hoje você pegará carona com <strong>Lucas F.</strong> na <strong>Av. Dr. Afonso Vergueiro, 1300</strong> às <strong>7h00</strong>';
+
+}
+
+
+renderCalendario();
+
+}
+
+
+// ===== CALENDÁRIO =====
+
+const meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+let mesAtual = new Date().getMonth();
+
+let anoAtual = new Date().getFullYear();
+
+const hoje = new Date();
+
+
+// Eventos de exemplo
+
+const eventosMotorista = {
+
+'2026-05-06': { tipo: 'disponivel', texto: 'Saída 19h · 2 passageiros' },
+
+'2026-05-07': { tipo: 'disponivel', texto: 'Saída 19h · 1 passageiro' },
+
+'2026-05-08': { tipo: 'disponivel', texto: 'Saída 19h · 3 passageiros' },
+
+'2026-05-09': { tipo: 'disponivel', texto: 'Saída 19h · 2 passageiros' },
+
+'2026-05-12': { tipo: 'disponivel', texto: 'Saída 19h · 2 passageiros' },
+
+'2026-05-13': { tipo: 'disponivel', texto: 'Saída 19h · 0 passageiros' },
+
+'2026-05-14': { tipo: 'disponivel', texto: 'Saída 19h · 1 passageiro' },
+
+'2026-05-15': { tipo: 'folga', texto: 'Dia sem carona marcado' },
+
+'2026-05-19': { tipo: 'disponivel', texto: 'Saída 19h · 3 passageiros' },
+
+'2026-05-20': { tipo: 'disponivel', texto: 'Saída 19h · 2 passageiros' },
+
+};
+
+
+const eventosPassageiro = {
+
+'2026-05-06': { tipo: 'carona', texto: 'Carona com Lucas F. · 19h00 · Av. Dr. Afonso Vergueiro, 1300' },
+
+'2026-05-07': { tipo: 'carona', texto: 'Carona com Lucas F. · 19h00 · Av. Dr. Afonso Vergueiro, 1300' },
+
+'2026-05-08': { tipo: 'carona', texto: 'Carona com Lucas F. · 19h00 · Av. Dr. Afonso Vergueiro, 1300' },
+
+'2026-05-09': { tipo: 'carona', texto: 'Carona com Lucas F. · 19h00 · Av. Dr. Afonso Vergueiro, 1300' },
+
+'2026-05-13': { tipo: 'carona', texto: 'Carona com Rafael M. · 19h00 · R. das Flores, 88' },
+
+'2026-05-14': { tipo: 'carona', texto: 'Carona com Rafael M. · 19h00 · R. das Flores, 88' },
+
+'2026-05-15': { tipo: 'aviso', texto: 'Sem carona agendada' },
+
+'2026-05-20': { tipo: 'carona', texto: 'Carona com Lucas F. · 19h00 · Av. Dr. Afonso Vergueiro, 1300' },
+
+};
+
+
+function chaveData(ano, mes, dia) {
+
+return `${ano}-${String(mes+1).padStart(2,'0')}-${String(dia).padStart(2,'0')}`;
+
+}
+
+
+function renderCalendario() {
+
+const titulo = document.getElementById('calTitulo');
+
+titulo.textContent = `${meses[mesAtual]} ${anoAtual}`;
+
+
+const grid = document.querySelector('.calendario-grid');
+
+// Remover dias antigos (manter os 7 weekdays)
+
+const cells = grid.querySelectorAll('.cal-day, .cal-empty');
+
+cells.forEach(c => c.remove());
+
+
+const primeiroDia = new Date(anoAtual, mesAtual, 1).getDay();
+
+const totalDias = new Date(anoAtual, mesAtual + 1, 0).getDate();
+
+const eventos = modoMotorista ? eventosMotorista : eventosPassageiro;
+
+
+for (let i = 0; i < primeiroDia; i++) {
+
+const empty = document.createElement('div');
+
+empty.className = 'cal-empty';
+
+grid.appendChild(empty);
+
+}
+
+
+for (let d = 1; d <= totalDias; d++) {
+
+const cell = document.createElement('div');
+
+cell.className = 'cal-day';
+
+const chave = chaveData(anoAtual, mesAtual, d);
+
+const evento = eventos[chave];
+
+
+if (d === hoje.getDate() && mesAtual === hoje.getMonth() && anoAtual === hoje.getFullYear()) {
+
+cell.classList.add('hoje');
+
+}
+
+
+if (evento) {
+
+cell.classList.add('tem-evento', `evento-${evento.tipo}`);
+
+cell.onclick = () => abrirModal(d, evento);
+
+}
+
+
+cell.innerHTML = `<span class="cal-num">${d}</span>${evento ? '<span class="cal-dot"></span>' : ''}`;
+
+grid.appendChild(cell);
+
+}
+
+}
+
+
+function mudarMes(direcao) {
+
+mesAtual += direcao;
+
+if (mesAtual > 11) { mesAtual = 0; anoAtual++; }
+
+if (mesAtual < 0) { mesAtual = 11; anoAtual--; }
+
+renderCalendario();
+
+}
+
+
+// ===== MODAL DO DIA =====
+
+function abrirModal(dia, evento) {
+
+document.getElementById('modalTitulo').textContent = `${String(dia).padStart(2,'0')}/${String(mesAtual+1).padStart(2,'0')}/${anoAtual}`;
+
+const tipoLabel = { disponivel: '🚗 Disponível', carona: '✅ Carona Agendada', folga: '💤 Folga', aviso: '⚠️ Aviso' };
+
+document.getElementById('modalConteudo').innerHTML = `
+
+<div class="modal-evento-tipo ${evento.tipo}">${tipoLabel[evento.tipo] || evento.tipo}</div>
+
+<p class="modal-evento-texto">${evento.texto}</p>
+
+`;
+
+document.getElementById('modalOverlay').classList.add('ativo');
+
+}
+
+
+function fecharModal() {
+
+document.getElementById('modalOverlay').classList.remove('ativo');
+
+}
+
+
+// ===== CHAT ESTÁTICO =====
+
+function abrirChat(contato) {
+
+document.querySelectorAll('.contact-item').forEach(c => c.classList.remove('active'));
+
+event.currentTarget.classList.add('active');
+
+// Remove badge
+
+const badge = event.currentTarget.querySelector('.contact-badge');
+
+if (badge) badge.remove();
+
+}
+
+
+function enviarMsg(e) {
+
+if (e.key === 'Enter') enviarMsgBotao();
+
+}
+
+
+function enviarMsgBotao() {
+
+const input = document.getElementById('chatInput');
+
+const texto = input.value.trim();
+
+if (!texto) return;
+
+
+const msgs = document.getElementById('chatMessages');
+
+const div = document.createElement('div');
+
+div.className = 'msg-sent';
+
+div.innerHTML = `<span>${texto}</span>`;
+
+msgs.appendChild(div);
+
+input.value = '';
+
+msgs.scrollTop = msgs.scrollHeight;
+
+}
+
+
+// ===== BOTÕES DE PERÍODO =====
+
+document.addEventListener('click', function(e) {
+
+if (e.target.classList.contains('periodo-btn')) {
+
+document.querySelectorAll('.periodo-btn').forEach(b => b.classList.remove('active'));
+
+e.target.classList.add('active');
+
+}
+
+});
+
+
+// ===== INIT =====
+
+window.onload = function() {
+
+RandomBackgroundDesu();
+
+renderCalendario();
+
+// Inicia toggle visual no modo motorista
+
+document.getElementById('toggleThumb').style.transform = 'translateX(26px)';
+
+document.getElementById('toggleTrack').style.background = 'rgba(148, 0, 126, 0.6)';
+
+};
+
+</script>
+
+</body>
+
+</html> 

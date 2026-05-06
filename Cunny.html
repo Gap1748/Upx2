@@ -1,111 +1,1027 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esquecidos</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Esquecidos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Zen+Dots&family=Dela+Gothic+One&family=Sawarabi+Mincho&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red:     #ff0037;
+      --green:   #1aff1a;
+      --purple:  #9400be;
+      --violet:  #c800ff;
+      --ba-blue: #4fc3f7;
+      --dark:    #05050d;
+    }
 
-        body, html {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: black;
-            font-family: 'Arial Black', sans-serif;
-        }
+    * { margin:0; padding:0; box-sizing:border-box; }
 
-        #video-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: 1;
-            filter: brightness(0.4);
-        }
+    body, html {
+      width:100%; height:100%;
+      background: var(--dark);
+      font-family: 'Share Tech Mono', monospace;
+      overflow-x: hidden;
+      cursor: none;
+    }
 
-        .gif-bar {
-            position: fixed;
-            left: 0;
-            width: 100%;
-            display: flex;
-            justify-content: space-around;
-            padding: 10px;
-            z-index: 10;
-        }
+    /* ===== CURSOR ===== */
+    #cursor {
+      position:fixed; width:12px; height:12px; border-radius:50%;
+      background: var(--red); pointer-events:none; z-index:99999;
+      transform:translate(-50%,-50%);
+      mix-blend-mode: difference;
+      transition: transform 0.06s;
+    }
+    #cursor-ring {
+      position:fixed; width:30px; height:30px; border-radius:50%;
+      border:1px solid var(--ba-blue); pointer-events:none; z-index:99998;
+      transform:translate(-50%,-50%);
+      transition: transform 0.13s ease, width 0.2s, height 0.2s, border-color 0.25s;
+      opacity:0.7;
+    }
 
-        .top-bar { top: 0; }
-        .bottom-bar { bottom: 0; }
+    /* ===== VÍDEO ===== */
+    #video-background {
+      position:fixed; inset:0; width:100%; height:100%;
+      object-fit:cover; z-index:1;
+      filter: brightness(0.22) saturate(1.5) hue-rotate(8deg);
+    }
 
-        .gif-bar img {
-            width: 250px; 
-            height: auto;
-            border-radius: 5px;
-        }
+    /* ===== EFEITOS CAMADAS ===== */
+    .scanlines {
+      position:fixed; inset:0; z-index:4; pointer-events:none;
+      background: repeating-linear-gradient(
+        to bottom, transparent, transparent 2px,
+        rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 4px
+      );
+    }
+    .vignette {
+      position:fixed; inset:0; z-index:3; pointer-events:none;
+      background: radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,0.88) 100%);
+    }
+    .noise {
+      position:fixed; inset:0; z-index:2; pointer-events:none; opacity:0.038;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      animation: noiseShift 0.12s steps(3) infinite;
+    }
+    @keyframes noiseShift {
+      0%  { transform:translate(0,0); }
+      33% { transform:translate(-3px,1px); }
+      66% { transform:translate(2px,-2px); }
+      100%{ transform:translate(-1px,3px); }
+    }
+    .sweep { position:fixed; inset:0; z-index:5; pointer-events:none; overflow:hidden; }
+    .sweep::after {
+      content:''; position:absolute; left:0; width:100%; height:2px;
+      background: rgba(79,195,247,0.4);
+      box-shadow: 0 0 14px var(--ba-blue), 0 0 40px rgba(79,195,247,0.18);
+      animation: sweepLine 9s linear infinite;
+    }
+    @keyframes sweepLine {
+      0%  { top:-2px; opacity:0; }
+      3%  { opacity:1; }
+      97% { opacity:1; }
+      100%{ top:100%; opacity:0; }
+    }
 
-        .centro {
-            position: relative;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: white;
-            z-index: 5;
-        }
+    /* Flash */
+    #flash {
+      position:fixed; inset:0; z-index:9997;
+      background:white; opacity:0; pointer-events:none; display:none;
+    }
+    #flash.ativo { display:block; animation: flashAnim 0.7s ease forwards; }
+    @keyframes flashAnim { 0%{opacity:0.92;} 100%{opacity:0;} }
 
-        h1 { font-size: 3rem; text-shadow: 4px 4px 10px black; margin-bottom: 20px; }
-        h2 { font-size: 1rem; color: #ff4d4d; max-width: 600px; text-shadow: 2px 2px 5px black; }
+    /* ===== OVERLAY ===== */
+    #overlay {
+      position:fixed; inset:0; z-index:9999;
+      background: rgba(3,3,10,0.96);
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      gap:18px; backdrop-filter:blur(12px);
+      transition: opacity 0.7s ease;
+    }
+    #overlay::before, #overlay::after {
+      content:''; position:absolute;
+      width:88px; height:88px;
+      border-style:solid; border-color: rgba(79,195,247,0.38);
+      animation: cornerPulse 2.6s ease-in-out infinite alternate;
+    }
+    #overlay::before { top:20px; left:20px; border-width:2px 0 0 2px; }
+    #overlay::after  { bottom:20px; right:20px; border-width:0 2px 2px 0; }
+    @keyframes cornerPulse { from{opacity:0.18;} to{opacity:0.75;} }
 
-        .ckr-voltas {
-            margin-top: 40px;
-            padding: 15px 50px;
-            font-size: 30px;
-            background: transparent;
-            color: white;
-            border: 4px solid white;
-            text-decoration: none;
-            transition: 0.3s;
-        }
+    .ov-alerta {
+      font-family:'Zen Dots',sans-serif; font-size:0.58rem;
+      color:var(--ba-blue); letter-spacing:6px; text-transform:uppercase;
+      text-shadow:0 0 16px rgba(79,195,247,0.8);
+      animation: blink 1.8s step-end infinite;
+    }
+    @keyframes blink { 50%{opacity:0;} }
 
-        .ckr-voltas:hover { background: white; color: black; }
-    </style>
+    .ov-titulo {
+      font-family:'Zen Dots',sans-serif;
+      font-size:clamp(1rem,2.5vw,1.7rem);
+      color:white; letter-spacing:3px; text-align:center;
+      text-shadow:0 0 30px rgba(255,0,55,0.38);
+    }
+
+    .ov-box {
+      border:1px solid rgba(79,195,247,0.18);
+      border-top:2px solid var(--ba-blue);
+      border-radius:3px; padding:32px 44px;
+      display:flex; flex-direction:column;
+      align-items:center; gap:16px;
+      background:rgba(0,0,0,0.6); min-width:320px;
+      box-shadow:0 0 50px rgba(79,195,247,0.05), inset 0 0 30px rgba(79,195,247,0.02);
+    }
+
+    .ov-status {
+      font-size:0.54rem; color:rgba(79,195,247,0.5);
+      letter-spacing:3px; text-transform:uppercase;
+      align-self:flex-start; display:flex; align-items:center; gap:8px;
+    }
+    .status-dot {
+      width:6px; height:6px; border-radius:50%;
+      background:var(--green); box-shadow:0 0 8px var(--green);
+      animation:blink 0.9s step-end infinite;
+    }
+
+    .ov-label {
+      font-size:0.58rem; color:rgba(255,255,255,0.22);
+      text-transform:uppercase; letter-spacing:3px; align-self:flex-start;
+    }
+
+    #input-codigo {
+      background:rgba(79,195,247,0.03);
+      border:1px solid rgba(79,195,247,0.22);
+      border-bottom:2px solid rgba(79,195,247,0.52);
+      border-radius:2px; padding:14px 20px;
+      color:var(--green); font-family:'Share Tech Mono',monospace;
+      font-size:1.5rem; letter-spacing:10px;
+      text-align:center; width:100%; outline:none;
+      transition:border 0.2s, box-shadow 0.2s;
+      caret-color:var(--red);
+    }
+    #input-codigo:focus {
+      border-color:rgba(79,195,247,0.65);
+      box-shadow:0 0 22px rgba(79,195,247,0.1);
+    }
+    #input-codigo.erro {
+      border-color:var(--red); color:var(--red);
+      box-shadow:0 0 22px rgba(255,0,55,0.28);
+      animation:shake 0.4s ease;
+    }
+    #input-codigo.acerto {
+      border-color:var(--green);
+      box-shadow:0 0 30px rgba(26,255,26,0.32);
+    }
+    @keyframes shake {
+      0%,100%{transform:translateX(0);}
+      20%{transform:translateX(-10px) skewX(-3deg);}
+      40%{transform:translateX(10px) skewX(3deg);}
+      60%{transform:translateX(-7px);}
+      80%{transform:translateX(7px);}
+    }
+
+    #msg-erro {
+      font-size:0.67rem; color:var(--red); letter-spacing:1px;
+      text-align:center; min-height:16px; text-transform:uppercase;
+      text-shadow:0 0 12px rgba(255,0,55,0.45);
+    }
+    #tentativas-ct {
+      font-size:0.51rem; color:rgba(148,0,190,0.5);
+      letter-spacing:2px; align-self:flex-end; text-transform:uppercase;
+    }
+
+    #btn-entrar {
+      background:transparent; border:1px solid rgba(79,195,247,0.42);
+      color:var(--ba-blue); padding:11px 36px;
+      font-family:'Zen Dots',sans-serif; font-size:0.72rem;
+      letter-spacing:4px; text-transform:uppercase;
+      cursor:none; border-radius:2px; transition:0.2s; width:100%;
+      position:relative; overflow:hidden;
+    }
+    #btn-entrar::before {
+      content:''; position:absolute; left:-100%; top:0;
+      width:100%; height:100%;
+      background:linear-gradient(90deg,transparent,rgba(79,195,247,0.1),transparent);
+      transition:left 0.4s;
+    }
+    #btn-entrar:hover::before { left:100%; }
+    #btn-entrar:hover {
+      background:rgba(79,195,247,0.09); border-color:var(--ba-blue);
+      box-shadow:0 0 22px rgba(79,195,247,0.16); color:white;
+    }
+
+    .ov-hint {
+      font-size:0.46rem; color:rgba(255,255,255,0.06);
+      letter-spacing:3px; text-transform:uppercase; transition:color 0.5s;
+    }
+    .ov-hint:hover { color:rgba(255,255,255,0.28); }
+
+    /* ===== CONTEÚDO ===== */
+    #conteudo { display:none; position:relative; z-index:5; width:100%; min-height:100vh; }
+
+    /* --- HERO --- */
+    .hero {
+      position:fixed; inset:0;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      text-align:center; z-index:6;
+      gap:12px; padding:165px 20px;
+      pointer-events:none;
+    }
+
+    .sys-tag {
+      font-family:'Share Tech Mono',monospace; font-size:0.57rem;
+      color:var(--ba-blue); letter-spacing:5px; text-transform:uppercase;
+      opacity:0.62; text-shadow:0 0 12px rgba(79,195,247,0.48);
+      animation:fadeUp 0.7s ease both 0.1s;
+    }
+
+    h1 {
+      font-family:'Zen Dots',sans-serif;
+      font-size:clamp(1.3rem,3vw,2.4rem);
+      color:white; line-height:1.25; max-width:680px;
+      text-shadow:4px 4px 20px black, 0 0 40px rgba(255,0,55,0.18);
+      animation:fadeUp 0.9s ease both 0.2s, glitchH 10s infinite 3s;
+    }
+    @keyframes glitchH {
+      0%,87%,100% { text-shadow:4px 4px 20px black, 0 0 40px rgba(255,0,55,0.18); transform:none; clip-path:none; }
+      88% { text-shadow:-5px 0 var(--red), 5px 0 var(--green), 0 0 20px black; transform:skewX(-2.5deg); }
+      89% { clip-path:inset(15% 0 50% 0); text-shadow:6px 0 var(--ba-blue); transform:skewX(1deg) translateX(4px); }
+      90% { text-shadow:4px 4px 20px black; clip-path:none; transform:none; }
+      92% { text-shadow:4px 0 var(--violet), -4px 0 var(--ba-blue); transform:skewX(1.5deg); }
+      93% { text-shadow:4px 4px 20px black; transform:none; }
+    }
+
+    .linha-deco {
+      width:72px; height:1px;
+      background:linear-gradient(90deg,transparent,var(--ba-blue),var(--violet),transparent);
+      animation:fadeUp 0.7s ease both 0.35s;
+    }
+
+    h2 {
+      font-family:'Share Tech Mono',monospace;
+      font-size:clamp(0.54rem,1vw,0.78rem);
+      color:rgba(255,255,255,0.36);
+      max-width:540px; letter-spacing:2px; line-height:1.9;
+      animation:fadeUp 0.9s ease both 0.45s;
+    }
+    h2 .hl { color:var(--ba-blue); text-shadow:0 0 10px rgba(79,195,247,0.42); }
+
+    #flavor-ct {
+      font-family:'Share Tech Mono',monospace; font-size:0.53rem;
+      color:rgba(148,0,190,0.52); letter-spacing:3px; text-transform:uppercase;
+      animation:fadeUp 0.7s ease both 0.55s;
+    }
+
+    .voltar {
+      margin-top:8px; padding:11px 42px;
+      font-family:'Zen Dots',sans-serif; font-size:0.73rem;
+      color:white; border:1px solid rgba(255,255,255,0.28);
+      text-decoration:none; letter-spacing:3px; text-transform:uppercase;
+      transition:0.3s; pointer-events:all; cursor:none;
+      position:relative; overflow:hidden;
+      animation:fadeUp 0.9s ease both 0.65s;
+    }
+    .voltar::before {
+      content:''; position:absolute; left:-100%; top:0;
+      width:100%; height:100%;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,0.07),transparent);
+      transition:left 0.5s;
+    }
+    .voltar:hover::before { left:100%; }
+    .voltar:hover {
+      background:rgba(255,255,255,0.07); border-color:white;
+      box-shadow:0 0 20px rgba(255,255,255,0.08);
+    }
+
+    @keyframes fadeUp {
+      from{opacity:0;transform:translateY(16px);}
+      to{opacity:1;transform:translateY(0);}
+    }
+
+    /* --- GIF BARS --- */
+    .gif-bar {
+      position:fixed; left:0; width:100%;
+      display:flex; justify-content:space-around;
+      z-index:10; pointer-events:none;
+    }
+    .top-bar    { top:0; }
+    .bottom-bar { bottom:0; }
+
+    .gif-bar img {
+      width:210px; height:auto;
+      filter:drop-shadow(0 0 6px rgba(79,195,247,0.28));
+      pointer-events:all; cursor:none;
+      transition:filter 0.25s ease;
+    }
+    .gif-bar img.tremendo {
+      animation:tremer 0.12s linear infinite;
+    }
+
+    /* --- GIF RAIN --- */
+    #gif-rain { position:fixed; inset:0; z-index:7; pointer-events:none; overflow:hidden; }
+    .gif-drop {
+      position:absolute; top:-260px;
+      height:auto; pointer-events:all; cursor:none;
+      filter:drop-shadow(0 0 10px rgba(79,195,247,0.45));
+      animation:gifDrop linear forwards;
+    }
+    @keyframes gifDrop {
+      0%  { top:-260px; opacity:0; transform:rotate(var(--rot)) scale(0.8); }
+      5%  { opacity:0.85; }
+      90% { opacity:0.85; }
+      100%{ top:110vh; opacity:0; transform:rotate(calc(var(--rot)*-1)) scale(1.1); }
+    }
+    .gif-drop.tremendo { animation-play-state:running; filter:drop-shadow(0 0 18px var(--violet)) brightness(1.2); }
+
+    /* --- FRASES LAYER --- */
+    #frases-layer { position:fixed; inset:0; z-index:8; pointer-events:none; overflow:hidden; }
+    .frase {
+      position:absolute;
+      font-family:'Share Tech Mono',monospace;
+      font-size:clamp(0.52rem,1.1vw,0.82rem);
+      color:rgba(255,255,255,0.1);
+      letter-spacing:2px; text-transform:uppercase;
+      white-space:nowrap; pointer-events:all; cursor:none;
+      transition:color 0.3s, text-shadow 0.3s, transform 0.25s;
+      user-select:none;
+    }
+    .frase.ativa {
+      color:rgba(79,195,247,0.72);
+      text-shadow:0 0 20px rgba(79,195,247,0.48), 0 0 40px rgba(148,0,190,0.28);
+      transform:scale(1.05);
+    }
+    .frase.glitchando {
+      animation:fraseGlitch 0.28s steps(2) forwards;
+    }
+    @keyframes fraseGlitch {
+      0%  { transform:translateX(-5px) skewX(-5deg); color:var(--red); filter:blur(1px); }
+      33% { transform:translateX(5px) skewX(3deg); color:var(--green); }
+      66% { transform:translateX(-2px); color:var(--ba-blue); filter:blur(0); }
+      100%{ transform:translateX(0) skewX(0); }
+    }
+
+    .frase-big {
+      font-family:'Dela Gothic One',sans-serif;
+      font-size:clamp(2rem,6vw,5rem);
+      color:rgba(255,0,55,0.05);
+      text-transform:uppercase; pointer-events:none; user-select:none;
+    }
+
+    .jp-deco {
+      font-family:'Sawarabi Mincho',serif;
+      writing-mode:vertical-rl; font-size:0.68rem;
+      color:rgba(79,195,247,0.12); letter-spacing:4px;
+      position:absolute; pointer-events:none; user-select:none;
+    }
+
+    @keyframes tremer {
+      0%  { transform:translate(0,0) rotate(0deg); }
+      25% { transform:translate(-3px,2px) rotate(-0.8deg); }
+      50% { transform:translate(3px,-2px) rotate(0.8deg); }
+      75% { transform:translate(-2px,3px) rotate(-0.5deg); }
+      100%{ transform:translate(2px,-3px) rotate(0.5deg); }
+    }
+
+    /* --- RODAPÉ SECRETO --- */
+    #rodape-secreto {
+      position:fixed; bottom:3px; left:50%; transform:translateX(-50%);
+      z-index:20; font-size:0.43rem; color:rgba(255,255,255,0.04);
+      letter-spacing:4px; text-transform:uppercase;
+      font-family:'Share Tech Mono',monospace;
+      transition:color 1s, text-shadow 1s; cursor:none; user-select:none;
+    }
+    #rodape-secreto:hover {
+      color:rgba(79,195,247,0.5);
+      text-shadow:0 0 12px rgba(79,195,247,0.35);
+    }
+
+    /* --- KONAMI BAR --- */
+    #konami-bar {
+      position:fixed; top:0; left:0; width:100%; z-index:99999; height:3px;
+      background:linear-gradient(90deg,var(--red),var(--violet),var(--ba-blue),var(--green));
+      transform:scaleX(0); transform-origin:left; transition:transform 0.18s ease;
+    }
+
+    /* --- MODO CAOS --- */
+    body.modo-caos #video-background {
+      animation:hueRoll 1.5s linear infinite;
+    }
+    @keyframes hueRoll {
+      from{filter:brightness(0.35) saturate(3) hue-rotate(0deg);}
+      to  {filter:brightness(0.35) saturate(3) hue-rotate(360deg);}
+    }
+    body.modo-caos h1 { animation:glitchH 0.28s infinite !important; }
+    body.modo-caos .gif-bar img {
+      filter:hue-rotate(180deg) drop-shadow(0 0 12px var(--violet));
+    }
+  </style>
 </head>
-<body onclick="iniciarAudio()">
+<body>
 
-    <video id="video-background" autoplay muted loop playsinline preload="auto">
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+  <div id="flash"></div>
+  <div id="konami-bar"></div>
+
+  <video id="video-background" autoplay muted loop playsinline preload="auto">
     <source src="Keks_Und_Lols/archavu.mp4" type="video/mp4">
-    Seu navegador não consegue carregar o vídeo. Verifique o caminho.
-</video>
+  </video>
 
-    <audio id="musica" loop preload="auto">
-        <source src="Keks_Und_Lols/Moskwa.mp3" type="audio/mpeg">
-    </audio>
+  <div class="scanlines"></div>
+  <div class="vignette"></div>
+  <div class="noise"></div>
+  <div class="sweep"></div>
 
-    <div class="gif-bar top-bar">
-        <img src="Keks_Und_Lols/imouto1.gif"><img src="Keks_Und_Lols/Fox.gif"><img src="Keks_Und_Lols/Arisu.gif"><img src="Keks_Und_Lols/Vazs.gif"><img src="Keks_Und_Lols/Wife.gif">
+  <audio id="musica" loop preload="auto">
+    <source src="Keks_Und_Lols/Moskwa.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- ===== OVERLAY ===== -->
+  <div id="overlay">
+    <div class="ov-alerta">⚠ acesso restrito ⚠</div>
+    <div class="ov-titulo">SISTEMA ESQUECIDOS</div>
+    <div class="ov-box">
+      <div class="ov-status"><span class="status-dot"></span>aguardando autenticação</div>
+      <div class="ov-label">código de acesso</div>
+      <input type="password" id="input-codigo" maxlength="10" placeholder="• • • • • •" autocomplete="off">
+      <div id="msg-erro"></div>
+      <div id="tentativas-ct"></div>
+      <button id="btn-entrar">▶ ENTRAR</button>
+    </div>
+    <div class="ov-hint">você não deveria estar aqui</div>
+  </div>
+
+  <!-- ===== CONTEÚDO ===== -->
+  <div id="conteudo">
+
+    <div class="gif-bar top-bar" id="top-bar">
+      <img src="Keks_Und_Lols/imouto1.gif">
+      <img src="Keks_Und_Lols/Fox.gif">
+      <img src="Keks_Und_Lols/Arisu.gif">
+      <img src="Keks_Und_Lols/Vazs.gif">
+      <img src="Keks_Und_Lols/Wife.gif">
     </div>
 
-    <div class="centro">
-        <h1>Este é o fim do individual e coletivo.</h1>
-        <h2>КОМУ КАКОЕ ДЕЛО ДО ЭТОГО ЧЁРТОВОГО ЗАМЫСЛА, O IMPORTANTE É RODAR</h2>
-        <a href="Basicus.html" class="ckr-voltas">VOLTAR</a>
+    <div class="hero">
+      <div class="sys-tag">[ ESQUECIDOS_SYS v0.∞ ] — ACESSO CONFIRMADO</div>
+      <h1>Este é o fim do individual e coletivo.</h1>
+      <div class="linha-deco"></div>
+      <h2>
+        КОМУ КАКОЕ ДЕЛО ДО ЭТОГО ЧЁРТОВОГО ЗАМЫСЛА,<br>
+        <span class="hl">O IMPORTANTE É RODAR</span>
+      </h2>
+      <p id="flavor-ct"></p>
+      <a href="Basicus.html" class="voltar">← VOLTAR</a>
     </div>
 
-    <div class="gif-bar bottom-bar">
-        <img src="Keks_Und_Lols/Daz.gif"><img src="Keks_Und_Lols/borak.gif"><img src="Keks_Und_Lols/break.gif"><img src="Keks_Und_Lols/sakuta.gif"><img src="Keks_Und_Lols/vol.gif">
+    <div class="gif-bar bottom-bar" id="bottom-bar">
+      <img src="Keks_Und_Lols/Daz.gif">
+      <img src="Keks_Und_Lols/borak.gif">
+      <img src="Keks_Und_Lols/break.gif">
+      <img src="Keks_Und_Lols/sakuta.gif">
+      <img src="Keks_Und_Lols/vol.gif">
     </div>
 
-    <script>
-        function iniciarAudio() {
-            var audio = document.getElementById("musica");
-            audio.volume = 0.5; 
-            audio.play().catch(error => console.log("Ainda bloqueado:", error));
+    <div id="gif-rain"></div>
+    <div id="frases-layer"></div>
+    <div id="rodape-secreto">↑ ↑ ↓ ↓ ← → ← → B A</div>
+
+  </div>
+
+<script>
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// CONFIG
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const CODIGO = "169203";
+
+const GIFS_POOL = [
+  'Keks_Und_Lols/imouto1.gif','Keks_Und_Lols/Fox.gif',
+  'Keks_Und_Lols/Arisu.gif',  'Keks_Und_Lols/Vazs.gif',
+  'Keks_Und_Lols/Wife.gif',   'Keks_Und_Lols/Daz.gif',
+  'Keks_Und_Lols/borak.gif',  'Keks_Und_Lols/break.gif',
+  'Keks_Und_Lols/sakuta.gif', 'Keks_Und_Lols/vol.gif',
+];
+
+const FRASES = [
+  "esquecidos mas não sumidos",
+  "забытые, но живые",
+  "忘れられても、ここにいる",
+  "o sistema não nos catalogou",
+  "we were never supposed to be here",
+  "это не баг, это фича",
+  "個人と集団の終わり",
+  "ninguém escolheu ser lembrado",
+  "глюк в матрице",
+  "the signal was always noise",
+  "誰かがここにいた",
+  "isso não é para você",
+  "мы не исчезли",
+  "kontinuidade é ilusão",
+  "404: identity not found",
+  "存在証明なし",
+  "o coletivo se dissolve no ruído",
+  "всё уже было написано",
+  "run it anyway",
+  "você chegou até aqui",
+  "система сломана",
+  "記憶は断片だ",
+  "memória fraturada em loop",
+  "it was always going to end this way",
+  "われわれはシステムの外にいる",
+  "нет выхода. продолжаем.",
+  "o importante é rodar",
+  "não era pra você encontrar isso",
+  "ここは終わりの始まりだ",
+  "we are the noise between channels",
+];
+
+const FRASES_BIG = ["ESQUECIDOS","忘却","FORGOTTEN","ЗАБЫТЫЕ","LOOP","∞","SISTEMA"];
+
+const MSGS_ERRO = [
+  "código incorreto.",
+  "nem você acredita que é isso.",
+  "continua tentando.",
+  "você realmente não sabe?",
+  "quem te mandou aqui?",
+  "sério mesmo?",
+  "ERRADO.",
+  "isso não é o código.",
+  "vai embora.",
+  "impossivel alguém se importar",
+  "você está me cansando.",
+  "ainda não.",
+  "impossível adivinhar isso.",
+  "volta lá pro Basicus.html.",
+  "baka.",
+  "você mora aqui agora?",
+  "[ INTRUSO DETECTADO ]",
+  "ok isso é engraçado agora.",
+  "неверный код.",
+  "コードが違います。",
+  "esse código não existe pra você.",
+  "sistem fehler. versuch nochmal.",
+  "nem eu lembro mais (mentira).",
+  "quanto tempo você tem?",
+];
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// CURSOR
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const cursor     = document.getElementById('cursor');
+const cursorRing = document.getElementById('cursor-ring');
+
+document.addEventListener('mousemove', e => {
+  cursor.style.left     = e.clientX + 'px';
+  cursor.style.top      = e.clientY + 'px';
+  cursorRing.style.left = e.clientX + 'px';
+  cursorRing.style.top  = e.clientY + 'px';
+  checarProximidade(e.clientX, e.clientY);
+});
+document.addEventListener('mousedown', () => {
+  cursor.style.transform     = 'translate(-50%,-50%) scale(1.9)';
+  cursorRing.style.transform = 'translate(-50%,-50%) scale(0.55)';
+});
+document.addEventListener('mouseup', () => {
+  cursor.style.transform     = 'translate(-50%,-50%) scale(1)';
+  cursorRing.style.transform = 'translate(-50%,-50%) scale(1)';
+});
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// OVERLAY / SENHA
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+let tentativas = 0, fugas = 0;
+
+const inputEl = document.getElementById('input-codigo');
+const msgEl   = document.getElementById('msg-erro');
+const tentEl  = document.getElementById('tentativas-ct');
+const btnEl   = document.getElementById('btn-entrar');
+
+function verificarCodigo() {
+  const valor = inputEl.value.trim();
+
+  if (valor === CODIGO) {
+    inputEl.classList.add('acerto');
+    inputEl.disabled = btnEl.disabled = true;
+    btnEl.textContent = '✓ ACESSO LIBERADO';
+    btnEl.style.color = 'var(--green)';
+    btnEl.style.borderColor = 'var(--green)';
+    msgEl.textContent = '';
+
+    const flash = document.getElementById('flash');
+    flash.classList.add('ativo');
+
+    setTimeout(() => {
+      const ov = document.getElementById('overlay');
+      ov.style.opacity = '0';
+      setTimeout(() => {
+        ov.style.display = 'none';
+        document.getElementById('conteudo').style.display = 'block';
+        if (tentativas > 0) {
+          document.getElementById('flavor-ct').textContent =
+            `${tentativas} tentativa${tentativas>1?'s':''} errada${tentativas>1?'s':''} pra chegar aqui.`;
         }
-    </script>
+        iniciarAudio();
+        iniciarCaos();
+      }, 700);
+    }, 280);
+    return;
+  }
 
+  tentativas++;
+  msgEl.textContent = MSGS_ERRO[(tentativas-1) % MSGS_ERRO.length];
+  tentEl.textContent = `tentativas: ${tentativas}`;
+
+  inputEl.classList.remove('erro');
+  void inputEl.offsetWidth;
+  inputEl.classList.add('erro');
+  inputEl.value = '';
+  setTimeout(() => inputEl.classList.remove('erro'), 450);
+
+  if (tentativas % 5 === 0) screenShake();
+  if (tentativas >= 10)     botaoFoge();
+}
+
+function screenShake() {
+  const ov = document.getElementById('overlay');
+  ov.style.transition = 'none';
+  let i = 0;
+  const iv = setInterval(() => {
+    const x=(Math.random()-.5)*14, y=(Math.random()-.5)*7;
+    ov.style.transform = `translate(${x}px,${y}px)`;
+    if (++i >= 10) { clearInterval(iv); ov.style.transform=''; ov.style.transition='opacity 0.7s ease'; }
+  }, 50);
+}
+
+function botaoFoge() {
+  if (fugas >= 3) return; fugas++;
+  const dx = (Math.random()>.5?1:-1)*(35+Math.random()*70);
+  const dy = (Math.random()>.5?1:-1)*(20+Math.random()*40);
+  btnEl.style.transition = 'transform 0.2s cubic-bezier(0.34,1.56,0.64,1)';
+  btnEl.style.transform  = `translate(${dx}px,${dy}px)`;
+  setTimeout(() => { btnEl.style.transform=''; }, 1400);
+}
+
+btnEl.addEventListener('click', verificarCodigo);
+inputEl.addEventListener('keypress', e => { if(e.key==='Enter') verificarCodigo(); });
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ÁUDIO
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function iniciarAudio() {
+  const a = document.getElementById('musica');
+  a.volume = 0.45;
+  a.play().catch(()=>{});
+}
+document.addEventListener('click', function fa() {
+  if (document.getElementById('conteudo').style.display==='block') {
+    iniciarAudio();
+    document.removeEventListener('click', fa);
+  }
+});
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// INÍCIO DO CAOS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function iniciarCaos() {
+  distribuirFrases();
+  iniciarGifRain();
+  animarGifBars();
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// FRASES MANIFESTO
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function distribuirFrases() {
+  const layer = document.getElementById('frases-layer');
+
+  // Fundo — frases gigantes decorativas
+  FRASES_BIG.forEach(txt => {
+    const el = document.createElement('div');
+    el.className = 'frase frase-big';
+    el.textContent = txt;
+    el.style.left      = (3 + Math.random()*80) + '%';
+    el.style.top       = (3 + Math.random()*85) + '%';
+    el.style.transform = `rotate(${(Math.random()-.5)*18}deg)`;
+    el.style.pointerEvents = 'none';
+    layer.appendChild(el);
+  });
+
+  // Japonês decorativo nas laterais
+  for (let i=0; i<6; i++) {
+    const jp = document.createElement('div');
+    jp.className = 'jp-deco';
+    jp.textContent = '忘却　断片　ループ　存在　システム　終わり';
+    jp.style.left = (Math.random()>.5 ? '1' : '93') + '%';
+    jp.style.top  = (Math.random()*65) + '%';
+    layer.appendChild(jp);
+  }
+
+  // Frases do manifesto
+  FRASES.forEach(txt => {
+    const el = document.createElement('div');
+    el.className = 'frase';
+    el.textContent = txt;
+    el.style.left      = (2 + Math.random()*88) + '%';
+    el.style.top       = (4 + Math.random()*89) + '%';
+    el.style.opacity   = (0.06 + Math.random()*0.11).toString();
+    el.style.transform = `rotate(${(Math.random()-.5)*9}deg)`;
+    el.style.fontSize  = (0.5 + Math.random()*0.55) + 'rem';
+
+    el.addEventListener('mouseenter', () => {
+      el.classList.add('ativa');
+      setTimeout(() => el.classList.add('glitchando'), 80);
+      setTimeout(() => el.classList.remove('glitchando'), 360);
+      cursorRing.style.borderColor = 'var(--violet)';
+      cursorRing.style.width = cursorRing.style.height = '52px';
+    });
+    el.addEventListener('mouseleave', () => {
+      el.classList.remove('ativa');
+      cursorRing.style.borderColor = 'var(--ba-blue)';
+      cursorRing.style.width = cursorRing.style.height = '30px';
+    });
+    // Clique embaralha posição
+    el.addEventListener('click', () => {
+      el.style.transition = 'left 0.45s cubic-bezier(0.34,1.56,0.64,1), top 0.45s cubic-bezier(0.34,1.56,0.64,1), transform 0.45s';
+      el.style.left      = (2 + Math.random()*88) + '%';
+      el.style.top       = (4 + Math.random()*89) + '%';
+      el.style.transform = `rotate(${(Math.random()-.5)*18}deg)`;
+      setTimeout(() => el.style.transition='', 600);
+    });
+
+    layer.appendChild(el);
+  });
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// GIF RAIN
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function iniciarGifRain() {
+  function spawnGif() {
+    const rain = document.getElementById('gif-rain');
+    const img  = document.createElement('img');
+    img.className = 'gif-drop';
+    img.src = GIFS_POOL[Math.floor(Math.random()*GIFS_POOL.length)];
+
+    const rot      = (Math.random()-.5)*32;
+    const duration = 7 + Math.random()*9;
+    const size     = 85 + Math.random()*110;
+
+    img.style.left   = (1 + Math.random()*90) + '%';
+    img.style.width  = size + 'px';
+    img.style.setProperty('--rot', rot + 'deg');
+    img.style.animationDuration = duration + 's';
+
+    // Tremor por proximidade já cuidado pelo listener global
+    rain.appendChild(img);
+    setTimeout(() => img.remove(), (duration+0.8)*1000);
+
+    setTimeout(spawnGif, 2200 + Math.random()*4500);
+  }
+  spawnGif();
+  setTimeout(spawnGif, 1100);
+  setTimeout(spawnGif, 2800);
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// GIF BARS — ENTRADA
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function animarGifBars() {
+  document.querySelectorAll('.top-bar img').forEach((img,i) => {
+    img.style.opacity   = '0';
+    img.style.transform = 'translateY(-130%)';
+    setTimeout(() => {
+      img.style.transition = 'transform 0.55s cubic-bezier(0.34,1.56,0.64,1), opacity 0.4s ease';
+      img.style.opacity    = '1';
+      img.style.transform  = 'translateY(0)';
+    }, 80 + i*110);
+  });
+  document.querySelectorAll('.bottom-bar img').forEach((img,i) => {
+    img.style.opacity   = '0';
+    img.style.transform = 'translateY(130%)';
+    setTimeout(() => {
+      img.style.transition = 'transform 0.55s cubic-bezier(0.34,1.56,0.64,1), opacity 0.4s ease';
+      img.style.opacity    = '1';
+      img.style.transform  = 'translateY(0)';
+    }, 130 + i*110);
+  });
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// PROXIMIDADE DO MOUSE → GIFS TREMEM
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const DIST_TREMER = 130;
+
+function checarProximidade(mx, my) {
+  document.querySelectorAll('.gif-bar img, .gif-drop').forEach(img => {
+    const r  = img.getBoundingClientRect();
+    const cx = r.left + r.width/2;
+    const cy = r.top  + r.height/2;
+    const d  = Math.hypot(mx-cx, my-cy);
+    img.classList.toggle('tremendo', d < DIST_TREMER);
+  });
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// KONAMI CODE
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const KONAMI_SEQ = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+let konamiIdx = 0;
+const konamiBar = document.getElementById('konami-bar');
+
+document.addEventListener('keydown', e => {
+  if (e.key==='Enter' && document.getElementById('overlay').style.display!=='none') {
+    verificarCodigo(); return;
+  }
+  if (e.key === KONAMI_SEQ[konamiIdx]) {
+    konamiIdx++;
+    konamiBar.style.transform = `scaleX(${konamiIdx/KONAMI_SEQ.length})`;
+    if (konamiIdx === KONAMI_SEQ.length) {
+      konamiIdx = 0;
+      konamiBar.style.transform = 'scaleX(0)';
+      ativarModoCaos();
+    }
+  } else {
+    konamiIdx = 0;
+    konamiBar.style.transform = 'scaleX(0)';
+  }
+});
+
+function ativarModoCaos() {
+  if (document.getElementById('conteudo').style.display!=='block') return;
+  document.body.classList.toggle('modo-caos');
+  const isCaos = document.body.classList.contains('modo-caos');
+
+  const flash = document.getElementById('flash');
+  flash.style.background = isCaos ? 'var(--red)' : 'white';
+  flash.classList.remove('ativo');
+  void flash.offsetWidth;
+  flash.classList.add('ativo');
+
+  const h1 = document.querySelector('h1');
+  h1.textContent = isCaos
+    ? '//TUDO A LA DIFERENÇA // KONAMI AGAIN TO EXIT //'
+    : (h1._orig || 'Este é o fim do individual e coletivo.');
+  if (!h1._orig && !isCaos) h1._orig = h1.textContent;
+}
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// VERITAS CODE (DIGITAR "veritas")
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const VERITAS_SEQ = "veritas";
+let veritasBuffer = "";
+
+// ASCII normal
+const ASCII_ARTS = [
+`██╗   ██╗███████╗██████╗ ██╗████████╗ █████╗ ███████╗
+██║   ██║██╔════╝██╔══██╗██║╚══██╔══╝██╔══██╗██╔════╝
+██║   ██║█████╗  ██████╔╝██║   ██║   ███████║███████╗
+╚██╗ ██╔╝██╔══╝  ██╔══██╗██║   ██║   ██╔══██║╚════██║
+ ╚████╔╝ ███████╗██║  ██║██║   ██║   ██║  ██║███████║
+  ╚═══╝  ╚══════╝╚═╝  ╚═╝╚═╝   ╚═╝   ╚═╝  ╚═╝╚══════╝`,
+
+`VERITAS.EXE LOADED...`,
+`truth was never hidden`,
+`you were not supposed to see this`,
+`signal > noise`,
+`[ACCESS GRANTED TO NULL LAYER]`,
+`we see you`,
+`// end of illusion`
+];
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 🔒 BASE64 ESCONDIDO (COLE TUDO AQUI)
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const RAW_B64 = `4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qOg4qO04qOL4qOB4qO84qCL4qCB4qCA4qCA4qOg4qCW4qCJ4qCA4qCA4qKA4qCU4qOc4qKg4qCI4qCR4qKM4qC74qOV4qKE4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCACuKggOKggOKggOKggOKggOKioOKivuKipeKgi+KigOKjvOKgi+KggOKggOKigOKhnOKggeKggOKggOKggOKjoOKgg+KhvOKhh+KgmOKhh+KihuKhgOKgs+KhiOKiouKgkeKihOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKhgOKggOKggOKggOKggOKggArioIDioIDioIDioIDiobTiob/iorPio77io7TioKviooTioZnioYTiooDioY7ioIDioIDioIDioIDiorDioIPioqDiooPioIHioIDio6fioJjioYnioLDioZHioYTioLPioIjioqPioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIAK4qCA4qCA4qCA4qK84qG04qKL4qGv4qC94qOH4qOg4qG04qC24qCH4qG+4qGO4qCA4qCA4qKg4qKA4qGH4qCA4qK44qC44qCA4qCA4qK54qCA4qGH4qCA4qCx4qC54qGA4qKj4qCA4qKj4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCACuKioOKggOKggOKiiOKjp+KhjeKggOKioOKjv+Khn+KggOKggOKiuOKiu+Kgh+KigOKjtOKjo+KjvuKisOKgg+KiuOKhhOKhhuKiuuKhvOKhhuKhh+KghuKggOKgh+Kjh+KgiOKgj+KhhOKihuKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggArioJjioJrioInioIHiorjio7fio6Tio7/iornioIDioIDioIDio7/ioZ7ioorio73ioJXioIHioLjioZzioIDiooDioL/io7fiob/iooPio7/io7fio4fioIDioYDiorjioIDioIDiorHio7jioIDioIDioIDio6Dio7TioZbioJLioJLio4bioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIAK4qCA4qCA4qKg4qO04qGf4qK54qOv4qC44qO44qKE4qCw4qOE4qO/4qO14qO/4qO/4qO24qOm4qGA4qKn4qKg4qCO4qKb4qCf4qKz4qO+4qGP4qCI4qO/4qGy4qOH4qK44qCA4qCA4qO44qC54qK34qCS4qCa4qCJ4qK74qO34qGA4qCg4qGY4qGE4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCACuKggOKggOKggOKhvOKigOKjv+Khn+KhgOKhv+KivuKhgOKit+Kjv+Kiv+Kjv+Kjv+Kjv+Khv+Kgt+KjnuKjo+KiluKjg+KhpOKjvuKjr+KjtuKjtuKjvuKjt+KhjOKjuOKhhOKggOKgj+KggOKjn+KjpuKjpOKgpOKgtOKhn+Kip+KggOKio+KgseKhgOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggArioIDioqDio7zio7Xio7/ior/iob/ioYfioLnioYDioKPiorjior/ioZvioJvioJvioJvioIPioIDioIjiornio7/ioJfioL/ioJnio7/io73io7/io7/iorvio7fioofioIPioIDioIDioYfiob/io7/ioIDioIDioIDiornioIjioofioIDioobiorPioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIAK4qCk4qCW4qKy4qGe4qO44qO/4qOn4qOH4qOn4qCZ4qKm4qGI4qKO4qCJ4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCR4qCk4qCA4qCA4qCI4qCJ4qCZ4qC74qKU4qO/4qOP4qCG4qCA4qOw4qKw4qCD4qG/4qCA4qCA4qCA4qCI4qGH4qCY4qOG4qCA4qCA4qKj4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCACuKjoOKjpOKjvuKjt+Kjv+Kjp+Kjv+Kjv+Kjt+KhoOKgoOKhmeKjj+KgieKggeKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKiqeKin+Khq+KgpOKgtOKioeKhn+KgoOKgh+KggOKggOKggOKggOKiueKhgOKguOKhhOKggOKgiOKih+KggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggArioJ/ioJvioJviorvio7/io7/io7/io7/io5/iorfio6Tio7nio7/io7fiobbioIbioIDioIDior/io5bioILioKTioKTio4TioIDioIDioIDiooDioL3ioIvioInio4DioKTioIDioIDioIjioLHioYTioIDioIDioIDio4DioYjioKfioaTioJfioKDiooTio4jiobbioIrioInioJHioKLioYDioIDioIDioIDioIDioIAK4qCA4qCA4qCA4qCA4qC54qO/4qO/4qO/4qO/4qGl4qGI4qKz4qO44qOG4qCA4qCA4qCA4qCA4qCA4qCZ4qCS4qCS4qCa4qCB4qCA4qOg4qCe4qCB4qCA4qGg4qCK4qCA4qCA4qCA4qCA4qCA4qCA4qCY4qGk4qKS4qGd4qCD4qCA4qC+4qCk4qGA4qCA4qCa4qCb4qOG4qCA4qCA4qCA4qCA4qKx4qCA4qCA4qCA4qCA4qCACuKggOKggOKggOKggOKggOKgmeKiv+Kjv+Kjv+Khh+Khh+KggOKjj+Khj+Kgs+KjhOKhgOKggOKggOKggOKggOKggOKggOKigOKhnOKggeKggOKigOKgjuKggOKggOKggOKggOKggOKggOKggOKglOKgiOKgieKimeKhtuKihOKggOKgiOKggOKjp+KjgOKjgOKhoOKgg+KggOKggOKggOKggOKggOKggOKggOKggOKggOKggArioIDioIDioIDioIDioIDioIDioIDioLvio7/io7fiornio7bio7/io7fioYDio4/ioInioLLioqTio4DiooDio4Dio6DioI7ioIDioIDioIDioIHioIDioIDioIDioIDioIDio4DioJTioorioKTioYDioIDioIDioIDiorjiobfioJLioIrioLTioIHio7jioIDioIDioIDioIDioIDioIDio7DioYDioIDioIDioIDioIAK4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qK54qO/4qK44qO74qO44qO/4qOf4qCP4qCA4qCA4qCA4qCA4qOA4qGg4qOe4qCG4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qGc4qCB4qCA4qCB4qCA4qGd4qO34qC24qCe4qCb4qCD4qCA4qCA4qCY4qK+4qGH4qCA4qCA4qCA4qCA4qKA4qG04qCB4qCZ4qKm4qGA4qCA4qCACuKggOKggOKggOKigOKhpOKgkuKgi+KgieKiieKhj+KjoOKgv+Kgn+Kgm+Kgi+KggOKgkeKgkuKivuKgreKjhOKjuOKgj+KggOKggOKggOKggOKggOKggOKggOKigOKhnOKggOKggOKjpOKgpOKgnuKgieKgieKggOKggOKggOKggOKggOKggOKggOKggOKgiOKgk+KghuKggOKigOKhnuKggOKggOKggOKggOKgkeKihOKggArioIDioIDioqDioI7ioIDioIDioqDio7bio57io4nioIDioIDioIDioIDioIDioIDioIDioIDioJnioIHioqHio7/ioIDioIDioIDioIDioIDioIDioIDiooDioI7ioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDiorjioIDioIDioIDioIDioIDioIDioIjioKMK4qCA4qCA4qGc4qCA4qCA4qKA4qCf4qCJ4qCI4qCB4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qKg4qCU4qKh4qGH4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qGH4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qK44qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCACuKggOKggOKhh+KggOKggOKhjOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKiuOKio+KggOKggOKggOKggOKggOKggOKhuOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKigOKhhuKggOKggOKggOKggOKggOKggOKggOKggArioIDio4Dio7fio6Dior7ioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioYbioLjioYTioIDioIDioIDioIDioqDioIPioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDiooDioZ7ioIDioIDioIDioIDioIDioIDioIDioIDioIAK4qO+4qO/4qCf4qKB4qO+4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qKg4qCH4qCw4qG54qGA4qCA4qCA4qCA4qCI4qKw4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qOg4qCO4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCACuKggOKhn+KggOKhvuKgu+KggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKigOKhoOKiu+KggOKggOKggeKgseKhgOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKjoOKgnuKggeKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggArio7jio4fiorjioYfioIDioqPioYDioIDioIDioIDioIDioIDioIDioIDioIDiooDio7TioIvioIDioY7ioIDioIDioIDioIDio7vioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDio6Dio7TioIvioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIAK4qK74qO/4qO84qKn4qOA4qGg4qCR4qKk4qGA4qCA4qCA4qCA4qCA4qOA4qC04qG/4qCB4qCA4qKA4qGH4qCA4qCA4qCA4qCA4qGH4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qKA4qGc4qCB4qCI4qOG4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCACuKgiOKiv+Kjv+Kjt+KgkuKggeKggOKggOKgiOKgieKgkuKjluKgi+KggeKhuOKggOKggOKhoOKiuOKggOKggOKggOKggOKggOKio+KggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKigOKgjuKggOKggOKggOKgmOKihuKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggArioIDioJjio7/io7/ioYDioIDioIDioIDioIDioIDioIDioLjioYTioIDioIDioIDioIDioIHioYfioIDioIDioIDioIDioIDioIjioYbioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDiooDio77ioIDioIDioIDioIDioIDioIjioqfioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIAK4qCA4qCA4qCI4qK/4qGH4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qO/4qOE4qCA4qCA4qCA4qKg4qCD4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCC4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qGc4qCY4qGG4qCA4qCA4qCA4qCA4qCA4qCA4qCx4qOE4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCACuKggOKggOKggOKgiOKit+KhgOKggOKggOKggOKggOKggOKggOKjv+Kjv+Kjt+Khh+KggOKiuOKggOKggOKggOKggOKggOKggOKggOKiueKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKisOKggeKggOKhh+KggOKggOKggOKggOKggOKggOKggOKgiOKipuKhgOKggOKggOKggOKggOKggOKggOKggOKggArioIDioIDioIDioIDioIDioLHio4TioIDioIDioIDioIDioIDior/io7/io7/ioYfioIDioY7ioIDioIDioIDioIDioIDioIDioIDio7zioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDiooDioIfioIDioIDiorPioIDioIDioIDioIDioIDioIDioIDioIDioIDioJniooTioIDioIDioIDioIDioIDioIDioIAK4qCA4qCA4qCA4qCA4qCA4qCA4qCI4qKi4qGA4qCA4qCA4qCA4qK44qO/4qO/4qO34qCA4qGH4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qK74qGH4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qKA4qCO4qCA4qCA4qCA4qK44qGA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCI4qCz4qOE4qCA4qCA4qCA4qCA4qCACuKggOKggOKggOKggOKggOKggOKggOKggOKgseKhhOKggOKggOKiuOKiuOKjv+Kjv+KjpOKggOKggOKggOKggOKggOKggOKggOKggOKggOKgueKjhOKggOKggOKggOKggOKggOKggOKggOKhoOKgi+KggOKggOKggOKggOKggOKhh+KggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKgiOKgs+KhhOKggOKggOKggArioIDioIDioIDioIDioIDioIDioIDioIDioIDiornioYDioIDiorjioIDio7/io7/io7/ioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioJHioILioIDioIDioIDioJLioIvioIDioIDioIDioIDioIDioIDioIDiorvioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIjioKLioYDioIAK4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCY4qOH4qCA4qO44qCA4qO44qO/4qG/4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qK44qGA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCY4qKmCuKggOKggOKioOKggOKggOKggOKggOKggOKggOKggOKggOKigOKhn+KioOKjv+Kjv+Khh+KggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKiuOKjh+KggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggArioIDioIDiorjio7fio4TioIDioIDioIDioIDioIDiooDiob7ioIHiorzio7/io7/ioYfioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioqjiob/io6bio4TioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIAK4qCA4qCA4qK44qGJ4qC74qO34qOm4qOA4qOA4qOA4qG+4qCB4qCA4qK54qO/4qO/4qGH4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qK44qGH4qC54qGM4qKz4qGA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCACuKipuKjuOKjvOKju+Kjt+KjpuKjjOKjueKgieKhj+KggOKggOKggOKiuOKjv+Kjv+Khh+KggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKiuOKggOKggOKis+KggOKiueKhgOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggArioIDioLniob/ior/iob/iooDioJ3ioIPioIDio6fioYDioIDioIDioIDior/io7/ioYfioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDio7zioIDioIDioLjioYbioIDioqPioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIAK4qCA4qKg4qO34qC+4qOb4qOh4qOk4qC04qC24qC/4qC/4qCG4qCA4qCA4qCY4qC74qOn4qOA4qGA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qOH4qCA4qCA4qCA4qOH4qCA4qC44qGE4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCACuKggOKggOKggOKgieKggeKggOKggOKggOKigOKjgOKggOKggOKggOKjpOKjhOKjgOKhpOKgreKjveKjt+KjpuKjhOKhgOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKgueKggOKggOKggOKgm+KggOKggOKggeKggOKggOKggOKggOKggOKggOKggOKggOKggOKggArio6fio4DioIDio4Dio6DioLTioLLioL/io7/io7/io6/io5/ioJLio7rio5/io7/io7/ioIDioIDioIjioInioJvioL/io6bio4TioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIAK4qO/4qO/4qO/4qGf4qCA4qCA4qCA4qCA4qCA4qCI4qCZ4qO74qO34qOP4qCY4qO/4qO/4qGG4qCA4qCA4qCA4qCA4qCA4qCA4qCZ4qC34qCE4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qGE4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCACuKjv+Kjv+Kjv+Kgg+KggOKggOKggOKggOKigOKhtOKjvuKgv+Kgm+Kgi+Kik+KjjOKjieKhreKiv+KggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKiuOKhp+KggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggArio7/io7/ioZ/ioIDioIDioIDioIDio7DioI/io7Dio7/ioInioInioIDioIDioIDioIDioIDioIjioYbioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioYfioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIAK4qO/4qO/4qCB4qCA4qCA4qCA4qCe4qCB4qOw4qCL4qK54qCA4qCA4qCA4qOA4qOk4qOk4qGA4qCA4qKz4qGE4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qKg4qGH4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCACuKjv+Kgg+KggOKggOKggOKggOKggOKioOKiv+KggOKggOKhh+KggOKjuOKgv+Kgv+Kgn+KggeKggOKiuOKjv+KjhuKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKjuOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggOKggArio7/iorbioITioJLioILioKziooTioZjioLjio4nioIniorHioKDiorbio6Tio6TiorDio7bioI/ioIDioY/ioInioInioIDioJDioILioJLioKDioKTio4DioYDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDioqDio7/ioYDioIDioIDioIDioIDioIDioIDioIDioIDioIDioIDio4DioaQK4qGA4qCA4qCA4qCA4qCA4qCA4qCw4qCJ4qKx4qCY4qC14qO64qCA4qCA4qCJ4qCJ4qCA4qCA4qCA4qCA4qKD4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCJ4qCT4qKE4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qCA4qOg4qO/4qK/4qO/4qGz4qC24qOm4qOk4qGk4qKk4qC04qCS4qCa4qCJ4qCB4qCACuKjt+KjpuKhhOKggOKggOKggOKggeKggOKgiOKjgOKggOKgiOKhh+KggOKggOKggOKggOKggOKggOKggOKguOKggOKggOKhoOKgnuKgieKhoeKgtOKiouKggOKggOKggOKgiOKhhuKggOKggOKggOKggOKggOKggOKjgOKjoOKjtOKjv+Khv+Kgg+KjvOKhv+Kgp+KggOKggOKggOKggOKgiOKgieKgieKggOKggOKggOKggA==`;
+
+// função de ofuscação (embaralha)
+function obscure(str) {
+  let out = "";
+  for (let i = 0; i < str.length; i++) {
+    out += String.fromCharCode(str.charCodeAt(i) ^ (i % 7));
+  }
+  return out;
+}
+
+// pré-processa (isso roda só uma vez)
+const HIDDEN = obscure(RAW_B64);
+
+// decodifica
+function getBigAscii() {
+  try {
+    const decoded = obscure(HIDDEN); // desfaz XOR
+    const binary = atob(decoded);
+
+    // converte corretamente para UTF-8 (resolve blocks quebrados)
+    const bytes = Uint8Array.from(binary, c => c.charCodeAt(0));
+    return new TextDecoder().decode(bytes);
+
+  } catch {
+    return "[CORRUPTED SIGNAL]";
+  }
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// DETECTOR DE SEQUÊNCIA
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+document.addEventListener('keydown', e => {
+  if (e.key.length === 1) {
+    veritasBuffer += e.key.toLowerCase();
+
+    if (veritasBuffer.length > VERITAS_SEQ.length) {
+      veritasBuffer = veritasBuffer.slice(-VERITAS_SEQ.length);
+    }
+
+    if (veritasBuffer === VERITAS_SEQ) {
+      ativarVeritas();
+      veritasBuffer = "";
+    }
+  }
+});
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// SPAWN ASCII ARTS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function ativarVeritas() {
+  const container = document.createElement('div');
+  container.style.position = "fixed";
+  container.style.inset = "0";
+  container.style.zIndex = "999999";
+  container.style.pointerEvents = "none";
+
+  document.body.appendChild(container);
+
+  for (let i = 0; i < 1; i++) {
+    const el = document.createElement('pre');
+
+    // 🎲 50% chance
+    el.textContent = Math.random() < 0.5
+      ? getBigAscii()
+      : ASCII_ARTS[i % ASCII_ARTS.length];
+
+    el.style.position = "absolute";
+    el.style.left = (5 + Math.random() * 85) + "%";
+    el.style.top = (5 + Math.random() * 85) + "%";
+    el.style.transform = `translate(-50%, -50%) rotate(${(Math.random() - 0.5) * 10}deg) scale(${0.7 + Math.random()*0.6})`;
+
+    el.style.color = "rgba(79,195,247,0.75)";
+    el.style.fontSize = "0.55rem";
+    el.style.fontFamily = "'Share Tech Mono', monospace";
+    el.style.textShadow = "0 0 12px rgba(79,195,247,0.6), 0 0 30px rgba(148,0,190,0.3)";
+    el.style.opacity = "0";
+    el.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+
+    container.appendChild(el);
+
+    setTimeout(() => el.style.opacity = "1", 100 + i * 120);
+    setTimeout(() => {
+      el.style.transform += ` skewX(${(Math.random()-0.5)*10}deg)`;
+    }, 400 + i * 100);
+    setTimeout(() => el.style.opacity = "0", 6000 + i * 300);
+  }
+
+  setTimeout(() => container.remove(), 9000);
+
+  const flash = document.getElementById('flash');
+  if (flash) {
+    flash.style.background = "var(--violet)";
+    flash.classList.remove('ativo');
+    void flash.offsetWidth;
+    flash.classList.add('ativo');
+  }
+}
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// RODAPÉ SECRETO
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+let rodapeCliques = 0;
+const RODAPE_MSGS = [
+  'você achou o segredo.',
+  'mas não tem mais nada aqui.',
+  'ou tem?',
+  '...',
+  'run it anyway.',
+  'забытые, но живые.',
+  '忘れられても、ここにいる',
+  'não era pra você encontrar isso.',
+  '(ou era?)',
+];
+document.getElementById('rodape-secreto')?.addEventListener('click', () => {
+  const h2  = document.querySelector('h2');
+  const msg = RODAPE_MSGS[rodapeCliques % RODAPE_MSGS.length];
+  rodapeCliques++;
+  if (!h2) return;
+  h2.style.transition = 'opacity 0.25s';
+  h2.style.opacity = '0';
+  setTimeout(() => {
+    h2.innerHTML = `<span class="hl">${msg}</span>`;
+    h2.style.opacity = '1';
+  }, 260);
+});
+</script>
 </body>
 </html>
