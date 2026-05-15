@@ -10,7 +10,7 @@
   <!-- Como o belo programmer front end que sou, não tenho orgulho em dizer que pouco entendo sobre oque acontece aqui (╥‸╥) -->
   <h1><span>Registro</span></h1>
 
-  <!-- Sem action e sem method — o JS vai assumir o controle , alem disso deixando tudo com um id para ficar mais facil depois-->
+<!-- assim ao inves de usar action p ir com js -->
   <form id="formRegistro">
     
     <input type="text" name="ra"       id="ra"       placeholder="RA (usuário)"        required>
@@ -50,13 +50,13 @@
       e.preventDefault(); //impede o comportamento padrão do navegador
 
       const dados = {
+        nome:     document.getElementById('nome').value,
         ra:       document.getElementById('ra').value,
         cpf:      document.getElementById('cpf').value,
         endereco: document.getElementById('endereco').value,
         email:    document.getElementById('email').value,
         telefone: document.getElementById('telefone').value,
-        senha:    document.getElementById('senha').value,
-        nome:     document.getElementById('nome').value
+        senha:    document.getElementById('senha').value
       };
 
       try {

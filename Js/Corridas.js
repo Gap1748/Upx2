@@ -1,7 +1,7 @@
 
 const API = "http://localhost:8080";
 
-// ── Toast de feedback (sucesso / erro) ──────────────────────
+// feedback (sucesso / erro) 
 function mostrarFeedback(mensagem, tipo = "sucesso") {
   const toast = document.createElement("div");
   toast.textContent = mensagem;

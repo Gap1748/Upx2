@@ -27,7 +27,7 @@
     <script>
       async function login() {
         //TEMPORÁRIOOOOOOOOOOOOOOOOOOOOOO
-        window.location.href = "StartZ.html"
+        
         const email = document.querySelector("[name='email']").value; 
         const senha = document.querySelector("[name='senha']").value;
 
@@ -51,8 +51,9 @@
         const usuario = await response.json();
 
         // AGORA DEVE FUNCIONAR
-        localStorage.setItem("usuarioId", usuario.id);// usando o localstorage para guardar qual foi o id do usuario que fez 
-                                                      // o login para conseguir atribuir o cadastro de motorista ao usuario certo. FINALMENTE
+        // Salva o objeto inteiro — resolve o problema sem precisar de novo endpoint
+        localStorage.setItem("usuarioLogado", JSON.stringify(usuario));// usando o localstorage para guardar qual foi o id do usuario que fez 
+                                                                       // o login para conseguir atribuir o cadastro de motorista ao usuario certo. FINALMENTE
 
         alert("Login realizado!");
 
@@ -61,6 +62,7 @@
       } catch (error) {
         console.error(error);
         alert("Erro ao conectar com o servidor...");
+
     }
 }
 

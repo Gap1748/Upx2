@@ -23,6 +23,16 @@
   </form>
 
   <script>
+
+    // Recupera o usuário logado do localStorage
+const _dadosSalvos = localStorage.getItem("usuarioLogado");
+if (_dadosSalvos) {
+  window.usuarioLogado = JSON.parse(_dadosSalvos);
+} else {
+  // Se não tiver ninguém logado, manda de volta pro login
+  // Comente essa linha se quiser testar sem login por enquanto
+  window.location.href = "login.html"; // troca pelo nome da sua página de login
+}
 document.getElementById("formRegistra").addEventListener("submit", function(e) {
     e.preventDefault();
 

@@ -22,71 +22,94 @@
     </form>
 
     <script>
-        document.getElementById("formRegistre").addEventListener("submit", async function(e) {
-        e.preventDefault();
+        document.getElementById("formRegistre")
+    .addEventListener("submit", async function(e) {
 
-        // pega dados da tela 1
-        const motorista = JSON.parse(localStorage.getItem("motorista"));
+    e.preventDefault();
 
-        // dados da tela 2
-        const veiculo = {
-            placa: document.getElementById("placa").value,
-            marca: document.querySelector("[name='marca']").value,
-            modelo: document.querySelector("[name='modelo']").value,
-            cor: document.querySelector("[name='cor']").value,
-            ano: document.getElementById("ano").value
-        };
+    // dados da tela 1
+    const motorista = JSON.parse(
+        localStorage.getItem("motorista")
+    );
 
-        const usuarioId = localStorage.getItem("usuarioId");
+    // dados da tela 2
+    const veiculo = {
+        placa: document.getElementById("placa").value,
+        marca: document.querySelector("[name='marca']").value,
+        modelo: document.querySelector("[name='modelo']").value,
+        cor: document.querySelector("[name='cor']").value,
+        ano: parseInt(document.getElementById("ano").value)
+    };
 
-        //obs: as informações da segunda tela não estão indo para o banco por enquanto, vou alterar 
-        // a table depois, mas de resto esta pronto , só não vai mandar msm.
-        const dadosCompletos = { 
-            usuarioId: usuarioId,
-            cnh: motorista.cnh,
-            placa: veiculo.placa
-        };
-        // agora vai tentar jogar tudo na table
+    const usuarioId = parseInt(
+        localStorage.getItem("usuarioId")
+    );
 
-        try {
-            const response = await fetch("http://localhost:8080/motoristas", {
+    try {
+
+        // cadastra o motorista
+
+        const motoristaResponse = await fetch(
+            "http://localhost:8080/motoristas",
+            {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
-            },
-                body: JSON.stringify(dadosCompletos)
-            });
-
-            if (response.ok) {
-                alert("Cadastro realizado com sucesso!");
-                localStorage.removeItem("motorista");
-                window.location.href = "SiteDesuwaaa.html";
-            } else {
-                alert("Erro ao cadastrar");
+                },
+                body: JSON.stringify({
+                    usuarioId: usuarioId,
+                    cnh: motorista.cnh
+                })
             }
+        );
+
+        if (!motoristaResponse.ok) {
+            alert("Erro ao cadastrar motorista");
+            return;
+        }
+
+        const motoristaSalvo =
+            await motoristaResponse.json();
+
+        // cadastra o veiculo
+
+        const veiculoResponse = await fetch(
+            "http://localhost:8080/veiculos",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    placa: veiculo.placa,
+                    marca: veiculo.marca,
+                    modelo: veiculo.modelo,
+                    cor: veiculo.cor,
+                    ano: veiculo.ano,
+
+                    motoristaId: motoristaSalvo.id
+                })
+            }
+        );
+
+        if (!veiculoResponse.ok) {
+            alert("Erro ao cadastrar veículo");
+            return;
+        }
+
+            alert("Cadastro realizado com sucesso!");
+
+            localStorage.removeItem("motorista");
+
+            window.location.href = "SiteDesuwaaa.html";
+
         } catch (error) {
+
             console.error(error);
+
             alert("Erro na conexão com o servidor");
         }
     });
-      function RandomBackgroundDesu() {
-    const Rando = Math.random(); 
-    let ImagicusChoosen = "";
-
-    if (Rando < 0.40) {
-        ImagicusChoosen = 'DaBackground.webp';
-    } else if (Rando < 0.80) {
-        ImagicusChoosen = 'DaBackGround.webp';
-    } else if (Rando < 0.99) {
-        ImagicusChoosen = 'daBackGround.webp';
-    } else {
-        ImagicusChoosen = 'DaBackDaGround.webp';
-    }
-    const AllTheWay = `Keks_Und_Lols/${ImagicusChoosen}`;    
-
-    document.body.style.backgroundImage = `url('${AllTheWay}')`;
-  }
-   window.onload = RandomBackgroundDesu;
     </script>
 
 </body>
