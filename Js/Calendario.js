@@ -1,145 +1,133 @@
-const meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+// ============================================================
+//  Calendario.js — Integração com backend
+//  Corrigido: suporta múltiplas corridas no mesmo dia
+// ============================================================
 
-let mesAtual = new Date().getMonth();
+const CAL_API = "http://localhost:8080";
 
-let anoAtual = new Date().getFullYear();
+const DIA_SEMANA_MAP = { 0:"DOM", 1:"SEG", 2:"TER", 3:"QUA", 4:"QUI", 5:"SEX", 6:"SAB" };
 
-const hoje = new Date();
-
-
-// Eventos de exemplo
-
-const eventosMotorista = {
-
-'2026-05-06': { tipo: 'disponivel', texto: 'Saída 19h · 2 passageiros' },
-
-'2026-05-07': { tipo: 'disponivel', texto: 'Saída 19h · 1 passageiro' },
-
-'2026-05-08': { tipo: 'disponivel', texto: 'Saída 19h · 3 passageiros' },
-
-'2026-05-09': { tipo: 'disponivel', texto: 'Saída 19h · 2 passageiros' },
-
-'2026-05-12': { tipo: 'disponivel', texto: 'Saída 19h · 2 passageiros' },
-
-'2026-05-13': { tipo: 'disponivel', texto: 'Saída 19h · 0 passageiros' },
-
-'2026-05-14': { tipo: 'disponivel', texto: 'Saída 19h · 1 passageiro' },
-
-'2026-05-15': { tipo: 'folga', texto: 'Dia sem carona marcado' },
-
-'2026-05-19': { tipo: 'disponivel', texto: 'Saída 19h · 3 passageiros' },
-
-'2026-05-20': { tipo: 'disponivel', texto: 'Saída 19h · 2 passageiros' },
-
-};
-
-
-const eventosPassageiro = {
-
-'2026-05-06': { tipo: 'carona', texto: 'Carona com Lucas F. · 19h00 · Av. Dr. Afonso Vergueiro, 1300' },
-
-'2026-05-07': { tipo: 'carona', texto: 'Carona com Lucas F. · 19h00 · Av. Dr. Afonso Vergueiro, 1300' },
-
-'2026-05-08': { tipo: 'carona', texto: 'Carona com Lucas F. · 19h00 · Av. Dr. Afonso Vergueiro, 1300' },
-
-'2026-05-09': { tipo: 'carona', texto: 'Carona com Lucas F. · 19h00 · Av. Dr. Afonso Vergueiro, 1300' },
-
-'2026-05-13': { tipo: 'carona', texto: 'Carona com Rafael M. · 19h00 · R. das Flores, 88' },
-
-'2026-05-14': { tipo: 'carona', texto: 'Carona com Rafael M. · 19h00 · R. das Flores, 88' },
-
-'2026-05-15': { tipo: 'aviso', texto: 'Sem carona agendada' },
-
-'2026-05-20': { tipo: 'carona', texto: 'Carona com Lucas F. · 19h00 · Av. Dr. Afonso Vergueiro, 1300' },
-
-};
-
-
-function chaveData(ano, mes, dia) {
-
-return `${ano}-${String(mes+1).padStart(2,'0')}-${String(dia).padStart(2,'0')}`;
-
+function chaveDataCal(ano, mes, dia) {
+  return `${ano}-${String(mes+1).padStart(2,"0")}-${String(dia).padStart(2,"0")}`;
 }
 
+// Guarda listas de corridas por dia — chave é "YYYY-MM-DD", valor é array
+// Ex: { "2026-05-16": [ corrida1, corrida2 ] }
+let _corridasPorDia = {};
 
-function renderCalendario() {
+// ── Motorista: disponibilidades recorrentes por dia da semana ──
+async function carregarEventosMotorista(usuario, ano, mes) {
+  try {
+    const res = await fetch(`${CAL_API}/disponibilidades/motorista/${usuario.id}`);
+    if (!res.ok) return;
 
-const titulo = document.getElementById('calTitulo');
+    const disponibilidades = await res.json();
+    const totalDias = new Date(ano, mes + 1, 0).getDate();
 
-titulo.textContent = `${meses[mesAtual]} ${anoAtual}`;
+    // Limpa eventos do mês atual antes de preencher
+    Object.keys(eventosMotorista).forEach(k => {
+      if (k.startsWith(`${ano}-${String(mes+1).padStart(2,"0")}`)) {
+        delete eventosMotorista[k];
+      }
+    });
 
+    disponibilidades
+      .filter(d => d.ativa)
+      .forEach(disp => {
+        if (!disp.diasSemana) return;
+        const dias = disp.diasSemana.split(",").map(d => d.trim());
 
-const grid = document.querySelector('.calendario-grid');
+        for (let d = 1; d <= totalDias; d++) {
+          const diaSemana = new Date(ano, mes, d).getDay();
+          if (dias.includes(DIA_SEMANA_MAP[diaSemana])) {
+            const chave = chaveDataCal(ano, mes, d);
+            eventosMotorista[chave] = {
+              tipo: "disponivel",
+              texto: `Saída ${disp.horarioIda} · ${disp.pontoPartida} · ${disp.vagasDisponiveis} vaga${disp.vagasDisponiveis > 1 ? "s" : ""}`
+            };
+          }
+        }
+      });
 
-// Remover dias antigos (manter os 7 weekdays)
-
-const cells = grid.querySelectorAll('.cal-day, .cal-empty');
-
-cells.forEach(c => c.remove());
-
-
-const primeiroDia = new Date(anoAtual, mesAtual, 1).getDay();
-
-const totalDias = new Date(anoAtual, mesAtual + 1, 0).getDate();
-
-const eventos = modoMotorista ? eventosMotorista : eventosPassageiro;
-
-
-for (let i = 0; i < primeiroDia; i++) {
-
-const empty = document.createElement('div');
-
-empty.className = 'cal-empty';
-
-grid.appendChild(empty);
-
+  } catch (e) {
+    console.warn("Erro ao carregar disponibilidades:", e);
+  }
 }
 
+// ── Passageiro: agrupa corridas por dia ──
+async function carregarEventosPassageiro(usuario, ano, mes) {
+  try {
+    const res = await fetch(`${CAL_API}/corridas/passageiro/${usuario.id}`);
+    if (!res.ok) return;
 
-for (let d = 1; d <= totalDias; d++) {
+    const corridas = await res.json();
 
-const cell = document.createElement('div');
+    // Limpa eventos do mês atual
+    Object.keys(eventosPassageiro).forEach(k => {
+      if (k.startsWith(`${ano}-${String(mes+1).padStart(2,"0")}`)) {
+        delete eventosPassageiro[k];
+      }
+    });
+    _corridasPorDia = {};
 
-cell.className = 'cal-day';
+    corridas.forEach(corrida => {
+      if (!corrida.dataHora) return;
+      const dt = new Date(corrida.dataHora);
+      if (dt.getMonth() !== mes || dt.getFullYear() !== ano) return;
 
-const chave = chaveData(anoAtual, mesAtual, d);
+      const chave = chaveDataCal(ano, mes, dt.getDate());
+      const horario = dt.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
 
-const evento = eventos[chave];
+      // Acumula no array do dia
+      if (!_corridasPorDia[chave]) _corridasPorDia[chave] = [];
+      _corridasPorDia[chave].push({
+        motorista: corrida.motorista?.nomeCompleto ?? "Motorista",
+        horario,
+        origem: corrida.origem ?? ""
+      });
+    });
 
+    // Monta eventosPassageiro a partir do agrupamento
+    Object.entries(_corridasPorDia).forEach(([chave, lista]) => {
+      if (lista.length === 1) {
+        eventosPassageiro[chave] = {
+          tipo: "carona",
+          texto: `Carona com ${lista[0].motorista} · ${lista[0].horario} · ${lista[0].origem}`
+        };
+      } else {
+        // Mais de uma corrida no dia → resumo + lista no modal
+        const detalhes = lista
+          .map(c => `• ${c.motorista} · ${c.horario} · ${c.origem}`)
+          .join("<br>");
+        eventosPassageiro[chave] = {
+          tipo: "carona",
+          texto: `${lista.length} corridas neste dia:<br>${detalhes}`
+        };
+      }
+    });
 
-if (d === hoje.getDate() && mesAtual === hoje.getMonth() && anoAtual === hoje.getFullYear()) {
-
-cell.classList.add('hoje');
-
+  } catch (e) {
+    console.warn("Erro ao carregar corridas do passageiro:", e);
+  }
 }
 
+// ── Função principal chamada pelo HTML ──
+async function carregarDadosCalendario() {
+  const usuario = window.usuarioLogado;
+  if (!usuario) {
+    renderCalendario();
+    return;
+  }
 
-if (evento) {
+  if (modoMotorista) {
+    await carregarEventosMotorista(usuario, anoAtual, mesAtual);
+  } else {
+    await carregarEventosPassageiro(usuario, anoAtual, mesAtual);
+  }
 
-cell.classList.add('tem-evento', `evento-${evento.tipo}`);
-
-cell.onclick = () => abrirModal(d, evento);
-
+  renderCalendario();
 }
 
-
-cell.innerHTML = `<span class="cal-num">${d}</span>${evento ? '<span class="cal-dot"></span>' : ''}`;
-
-grid.appendChild(cell);
-
-}
-
-}
-
-
-function mudarMes(direcao) {
-
-mesAtual += direcao;
-
-if (mesAtual > 11) { mesAtual = 0; anoAtual++; }
-
-if (mesAtual < 0) { mesAtual = 11; anoAtual--; }
-
-renderCalendario();
-
-}
+document.addEventListener("DOMContentLoaded", () => {
+  carregarDadosCalendario();
+});

@@ -9,6 +9,7 @@ import com.upx.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -20,70 +21,79 @@ public class CorridaService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    //Cria uma corrida
     public Corrida criar(Corrida corrida) {
         return repository.save(corrida);
     }
 
-    //Lista as corridas disponíveis
     public List<Corrida> listarDisponiveis() {
         return repository.findByStatus(StatusCorrida.AGENDADA);
     }
 
-    //Busca uma corrida por ID
     public Corrida buscarPorId(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Corrida não encontrada"));
     }
 
-    //Cancela uma corrida
     public Corrida cancelar(Long id) {
         Corrida corrida = buscarPorId(id);
         corrida.setStatus(StatusCorrida.CANCELADA);
         return repository.save(corrida);
     }
 
-    //Finaliza uma corrida
     public Corrida finalizar(Long id) {
         Corrida corrida = buscarPorId(id);
         corrida.setStatus(StatusCorrida.CONCLUIDA);
         return repository.save(corrida);
     }
 
-    //agora o dificil...
+    // Busca uma corrida existente do motorista na data, ou retorna null
+    // Usado pelo frontend para evitar criar corridas duplicadas
+    public Corrida buscarPorMotoristaEData(Long motoristaId, LocalDate data) {
+        return repository.findByMotoristaIdAndData(motoristaId, data).orElse(null);
+    }
+
     public Corrida entrarNaCorrida(Long corridaId, Long usuarioId) {
+        Corrida corrida = buscarPorId(corridaId);
 
-    Corrida corrida = buscarPorId(corridaId);
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-    Usuario usuario = usuarioRepository.findById(usuarioId)
-        .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-        // acho que ja ultilizei em outras partes do código mas caso quem estiver lendo não saibda o que é o -> é expressão lambda que basicamente 
-        //cria uma função em 1 linha que retorna o que esta a direita do ->.
+        if (corrida.getStatus() != StatusCorrida.AGENDADA) {
+            throw new RuntimeException("Corrida não está disponível");
+        }
 
-    // não pode entrar se não estiver agendada
-    if (corrida.getStatus() != StatusCorrida.AGENDADA) {
-        throw new RuntimeException("Corrida não está disponível");
+        if (corrida.getMotorista().getId().equals(usuario.getId())) {
+            throw new RuntimeException("Motorista não pode entrar na própria corrida");
+        }
+
+        if (corrida.getPassageiros().contains(usuario)) {
+            throw new RuntimeException("Usuário já está nesta corrida");
+        }
+
+        if (corrida.getPassageiros().size() >= corrida.getVagasDisponiveis()) {
+            throw new RuntimeException("Corrida lotada");
+        }
+
+        // Verifica se o passageiro já tem outra corrida neste mesmo dia
+        if (corrida.getDataHora() != null) {
+            LocalDate dataCorrida = corrida.getDataHora().toLocalDate();
+            List<Corrida> corridasDoUsuario = repository.findByPassageirosId(usuarioId);
+
+            boolean conflitoNoDia = corridasDoUsuario.stream()
+                .filter(c -> c.getStatus() == StatusCorrida.AGENDADA)
+                .filter(c -> c.getDataHora() != null)
+                .anyMatch(c -> c.getDataHora().toLocalDate().equals(dataCorrida));
+
+            if (conflitoNoDia) {
+                throw new RuntimeException("Você já tem uma corrida agendada neste dia");
+            }
+        }
+
+        corrida.getPassageiros().add(usuario);
+        return repository.save(corrida);
     }
 
-    // motorista não pode entrar como passageiro
-    if (corrida.getMotorista().getId().equals(usuario.getId())) {
-        throw new RuntimeException("Motorista não pode entrar na própria corrida");
+    public List<Corrida> listarPorPassageiro(Long usuarioId) {
+        return repository.findByPassageirosId(usuarioId);
     }
-
-    // evita duplicado
-    if (corrida.getPassageiros().contains(usuario)) {
-        throw new RuntimeException("Usuário já está na corrida");
-    }
-    //não deixa entrar em uma corrida lotada
-    if (corrida.getPassageiros().size() >= corrida.getVagasDisponiveis()) {
-    throw new RuntimeException("Corrida lotada");
-    }
-
-    // adiciona um passageiro (finalmente)
-    corrida.getPassageiros().add(usuario);
-
-   
-    return repository.save(corrida);
 }
-}
-
