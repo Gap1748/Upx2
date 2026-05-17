@@ -57,7 +57,7 @@
 
 <div class="mode-toggle">
 
-<span class="toggle-label" id="labelPassageiro">Passageiro</span>
+<span class="toggle-label" id="labelMotorista">Passageiro</span>
 
 <div class="toggle-track" id="toggleTrack" onclick="alternarModo()">
 
@@ -65,8 +65,7 @@
 
 </div>
 
-<span class="toggle-label" id="labelMotorista">Motorista</span>
-
+<span class="toggle-label" id="labelPassageiro">Motorista</span>
 </div>
 
 <button class="btn-voltar" onclick="location.href='Basicus.html'">← Voltar</button>
@@ -303,7 +302,7 @@
 
 <!-- PAINEL MOTORISTA -->
 
-<section class="painel-modo" id="painelMotorista">
+<section class="painel-modo" id="painelMotorista" style="display: none;">
 
 <h2>🚗 Minha Disponibilidade</h2>
 
@@ -439,7 +438,7 @@
 
 <!-- PAINEL PASSAGEIRO -->
 
-<section class="painel-modo" id="painelPassageiro" style="display:none;">
+<section class="painel-modo" id="painelPassageiro" style="display:block;">
 
 <h2>🔍 Buscar Carona</h2>
 
@@ -648,57 +647,44 @@ document.body.style.backgroundImage = `url('${AllTheWay}')`;
 
 // ===== TOGGLE MODO =====
 
-let modoMotorista = true;
+let modoMotorista = false;
 
 
 function alternarModo() {
+  modoMotorista = !modoMotorista;
 
-modoMotorista = !modoMotorista;
+  const thumb   = document.getElementById('toggleThumb');
+  const track   = document.getElementById('toggleTrack');
+  const roleTag = document.getElementById('profileRoleTag');
 
-const thumb = document.getElementById('toggleThumb');
+  if (modoMotorista) {
+    thumb.style.transform    = 'translateX(26px)';
+    track.style.background   = 'rgba(148, 0, 126, 0.6)';
+    roleTag.textContent      = 'Motorista';
+    roleTag.style.background = 'rgba(148,0,126,0.4)';
+    document.getElementById('avisoTexto').innerHTML = 'Hoje você tem <strong>3 passageiros</strong> confirmados. Saída às <strong>7h00</strong> da <strong>Av. Dr. Afonso Vergueiro, 1300</strong>';
+    
+    // chama a verificação em vez de trocar direto
+ //   trocarParaMotorista();
+   // carregarDadosCalendario();
+       document.getElementById('painelMotorista').style.display = 'block';
+    document.getElementById('painelPassageiro').style.display = 'none';
 
-const track = document.getElementById('toggleTrack');
+  } else {
+    thumb.style.transform    = 'translateX(0px)';
+    track.style.background   = 'rgba(255, 0, 55, 0.4)';
+    roleTag.textContent      = 'Passageiro';
+    roleTag.style.background = 'rgba(255,0,55,0.25)';
+    document.getElementById('avisoTexto').innerHTML = 'Hoje você pegará carona com <strong>Lucas F.</strong> na <strong>Av. Dr. Afonso Vergueiro, 1300</strong> às <strong>7h00</strong>';
 
-const roleTag = document.getElementById('profileRoleTag');
+    // chama a função do trocar-painel.js
+  //  trocarParaPassageiro();
+  //  carregarDadosCalendario();
+      document.getElementById('painelMotorista').style.display = 'none';
+    document.getElementById('painelPassageiro').style.display = 'block';
+  }
 
-
-if (modoMotorista) {
-
-thumb.style.transform = 'translateX(26px)';
-
-track.style.background = 'rgba(148, 0, 126, 0.6)';
-
-roleTag.textContent = 'Motorista';
-
-roleTag.style.background = 'rgba(148,0,126,0.4)';
-
-document.getElementById('painelMotorista').style.display = 'block';
-
-document.getElementById('painelPassageiro').style.display = 'none';
-
-document.getElementById('avisoTexto').innerHTML = 'Hoje você tem <strong>3 passageiros</strong> confirmados. Saída às <strong>7h00</strong> da <strong>Av. Dr. Afonso Vergueiro, 1300</strong>';
-
-} else {
-
-thumb.style.transform = 'translateX(0px)';
-
-track.style.background = 'rgba(255, 0, 55, 0.4)';
-
-roleTag.textContent = 'Passageiro';
-
-roleTag.style.background = 'rgba(255,0,55,0.25)';
-
-document.getElementById('painelMotorista').style.display = 'none';
-
-document.getElementById('painelPassageiro').style.display = 'block';
-
-document.getElementById('avisoTexto').innerHTML = 'Hoje você pegará carona com <strong>Lucas F.</strong> na <strong>Av. Dr. Afonso Vergueiro, 1300</strong> às <strong>7h00</strong>';
-
-}
-
-
-renderCalendario();
-
+ //  carregarDadosCalendario();
 }
 
 
@@ -714,51 +700,54 @@ const hoje = new Date();
 
 
 // Eventos de exemplo
+// obs Gabriel: comentei os exemplos para testar como fica sem... acho quer não vão mais ser usados mas é bom ter aqui
+// agora preenchidos pelo Calendario.js via backend ent tive que mudar um pouco
+const eventosMotorista = {};
+const eventosPassageiro = {};
+//const eventosMotorista = {
 
-const eventosMotorista = {
+//'2026-05-06': { tipo: 'disponivel', texto: 'Saída 19h · 2 passageiros' },
 
-'2026-05-06': { tipo: 'disponivel', texto: 'Saída 19h · 2 passageiros' },
+//'2026-05-07': { tipo: 'disponivel', texto: 'Saída 19h · 1 passageiro' },
 
-'2026-05-07': { tipo: 'disponivel', texto: 'Saída 19h · 1 passageiro' },
+//'2026-05-08': { tipo: 'disponivel', texto: 'Saída 19h · 3 passageiros' },
 
-'2026-05-08': { tipo: 'disponivel', texto: 'Saída 19h · 3 passageiros' },
+//'2026-05-09': { tipo: 'disponivel', texto: 'Saída 19h · 2 passageiros' },
 
-'2026-05-09': { tipo: 'disponivel', texto: 'Saída 19h · 2 passageiros' },
+//'2026-05-12': { tipo: 'disponivel', texto: 'Saída 19h · 2 passageiros' },
 
-'2026-05-12': { tipo: 'disponivel', texto: 'Saída 19h · 2 passageiros' },
+//'2026-05-13': { tipo: 'disponivel', texto: 'Saída 19h · 0 passageiros' },
 
-'2026-05-13': { tipo: 'disponivel', texto: 'Saída 19h · 0 passageiros' },
+//'2026-05-14': { tipo: 'disponivel', texto: 'Saída 19h · 1 passageiro' },
 
-'2026-05-14': { tipo: 'disponivel', texto: 'Saída 19h · 1 passageiro' },
+//'2026-05-15': { tipo: 'folga', texto: 'Dia sem carona marcado' },
 
-'2026-05-15': { tipo: 'folga', texto: 'Dia sem carona marcado' },
+//'2026-05-19': { tipo: 'disponivel', texto: 'Saída 19h · 3 passageiros' },
 
-'2026-05-19': { tipo: 'disponivel', texto: 'Saída 19h · 3 passageiros' },
+//'2026-05-20': { tipo: 'disponivel', texto: 'Saída 19h · 2 passageiros' },
 
-'2026-05-20': { tipo: 'disponivel', texto: 'Saída 19h · 2 passageiros' },
-
-};
+//};
 
 
-const eventosPassageiro = {
+//const eventosPassageiro = {
 
-'2026-05-06': { tipo: 'carona', texto: 'Carona com Lucas F. · 19h00 · Av. Dr. Afonso Vergueiro, 1300' },
+//'2026-05-06': { tipo: 'carona', texto: 'Carona com Lucas F. · 19h00 · Av. Dr. Afonso Vergueiro, 1300' },
 
-'2026-05-07': { tipo: 'carona', texto: 'Carona com Lucas F. · 19h00 · Av. Dr. Afonso Vergueiro, 1300' },
+//'2026-05-07': { tipo: 'carona', texto: 'Carona com Lucas F. · 19h00 · Av. Dr. Afonso Vergueiro, 1300' },
 
-'2026-05-08': { tipo: 'carona', texto: 'Carona com Lucas F. · 19h00 · Av. Dr. Afonso Vergueiro, 1300' },
+//'2026-05-08': { tipo: 'carona', texto: 'Carona com Lucas F. · 19h00 · Av. Dr. Afonso Vergueiro, 1300' },
 
-'2026-05-09': { tipo: 'carona', texto: 'Carona com Lucas F. · 19h00 · Av. Dr. Afonso Vergueiro, 1300' },
+//'2026-05-09': { tipo: 'carona', texto: 'Carona com Lucas F. · 19h00 · Av. Dr. Afonso Vergueiro, 1300' },
 
-'2026-05-13': { tipo: 'carona', texto: 'Carona com Rafael M. · 19h00 · R. das Flores, 88' },
+//'2026-05-13': { tipo: 'carona', texto: 'Carona com Rafael M. · 19h00 · R. das Flores, 88' },
 
-'2026-05-14': { tipo: 'carona', texto: 'Carona com Rafael M. · 19h00 · R. das Flores, 88' },
+//'2026-05-14': { tipo: 'carona', texto: 'Carona com Rafael M. · 19h00 · R. das Flores, 88' },
 
-'2026-05-15': { tipo: 'aviso', texto: 'Sem carona agendada' },
+//'2026-05-15': { tipo: 'aviso', texto: 'Sem carona agendada' },
 
-'2026-05-20': { tipo: 'carona', texto: 'Carona com Lucas F. · 19h00 · Av. Dr. Afonso Vergueiro, 1300' },
+//'2026-05-20': { tipo: 'carona', texto: 'Carona com Lucas F. · 19h00 · Av. Dr. Afonso Vergueiro, 1300' },
 
-};
+//};
 
 
 function chaveData(ano, mes, dia) {
@@ -846,8 +835,7 @@ if (mesAtual > 11) { mesAtual = 0; anoAtual++; }
 
 if (mesAtual < 0) { mesAtual = 11; anoAtual--; }
 
-renderCalendario();
-
+ carregarDadosCalendario();
 }
 
 
@@ -950,18 +938,21 @@ window.onload = function() {
 
 RandomBackgroundDesu();
 
-renderCalendario();
-
+ //carregarDadosCalendario();
 // Inicia toggle visual no modo motorista
 
-document.getElementById('toggleThumb').style.transform = 'translateX(26px)';
-
-document.getElementById('toggleTrack').style.background = 'rgba(148, 0, 126, 0.6)';
-
+document.getElementById('toggleThumb').style.transform = 'translateX(0px)';
+document.getElementById('toggleTrack').style.background = 'rgba(255, 0, 55, 0.4)';
+document.getElementById('profileRoleTag').textContent = 'Passageiro';
+document.getElementById('profileRoleTag').style.background = 'rgba(255,0,55,0.25)';
 };
 
 </script>
-
+<!-- 
+<script src="Js/Trocar-Painel.js"></script>
+<script src="Js/Corridas.js"></script>
+<script src="Js/Calendario.js"></script>
+-->
 </body>
 
 </html> 

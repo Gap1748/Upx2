@@ -13,8 +13,18 @@
 
   <form action="SUA_URL_DE_AUTENTICACAO_AQUI" method="POST">
     <div class="login-container">
+      <!-- MODO ANTIGO (placeholder dentro do campo):
       <input type="email" name="email" placeholder="Email" required>
       <input type="password" name="senha" placeholder="Senha" class="CunnyS" required>
+      -->
+      <div class="field-group">
+        <input type="email" name="email" id="email" required>
+        <label for="email">Email</label>
+      </div>
+      <div class="field-group">
+        <input type="password" name="senha" id="senha" class="CunnyS" required>
+        <label for="senha">Senha</label>
+      </div>
     </div>
 
     <main>
@@ -27,7 +37,7 @@
     <script>
       async function login() {
         //TEMPORÁRIOOOOOOOOOOOOOOOOOOOOOO
-        window.location.href = "StartZ.html"
+        window.location.href = "SiteDesuwaaa.html"
         const email = document.querySelector("[name='email']").value; 
         const senha = document.querySelector("[name='senha']").value;
 
@@ -50,17 +60,19 @@
 
         const usuario = await response.json();
 
-        // AGORA DEVE FUNCIONAR
-        localStorage.setItem("usuarioId", usuario.id);// usando o localstorage para guardar qual foi o id do usuario que fez 
-                                                      // o login para conseguir atribuir o cadastro de motorista ao usuario certo. FINALMENTE
+                // AGORA DEVE FUNCIONAR
+        // Salva o objeto inteiro — resolve o problema sem precisar de novo endpoint
+        localStorage.setItem("usuarioLogado", JSON.stringify(usuario));// usando o localstorage para guardar qual foi o id do usuario que fez 
+                                                                       // o login para conseguir atribuir o cadastro de motorista ao usuario certo. FINALMENTE
 
         alert("Login realizado!");
 
-        window.location.href = "StartZ.html";
+        window.location.href = "SiteDesuwaaa.html";
 
       } catch (error) {
         console.error(error);
         alert("Erro ao conectar com o servidor...");
+
     }
 }
 

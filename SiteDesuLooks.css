@@ -30,7 +30,7 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 14px 24px;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.82);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -195,7 +195,7 @@ body {
 .sidebar-chat {
   display: flex;
   flex-direction: column;
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(0, 0, 0, 0.82);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-right: 1px solid rgba(255, 255, 255, 0.07);
@@ -272,7 +272,7 @@ body {
   font-family: 'Montserrat', sans-serif;
   font-size: 0.8rem;
   font-weight: 700;
-  color: #fff;
+  color: #1aff1a;
 }
 
 .contact-name small {
@@ -343,7 +343,7 @@ body {
 .msg-received span {
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.1);
-  color: rgba(255,255,255,0.85);
+  color: #1aff1a;
   border-radius: 4px 12px 12px 12px;
 }
 
@@ -354,7 +354,7 @@ body {
 .msg-sent span {
   background: rgba(148,0,126,0.35);
   border: 1px solid rgba(148,0,126,0.5);
-  color: #fff;
+  color: #1aff1a;
   border-radius: 12px 4px 12px 12px;
 }
 
@@ -372,7 +372,7 @@ body {
   border: 1px solid rgba(255,255,255,0.12);
   border-radius: 6px;
   padding: 9px 12px;
-  color: #fff;
+  color: #1aff1a;
   font-family: 'Merriweather', serif;
   font-size: 0.78rem;
   outline: none;
@@ -426,7 +426,7 @@ body {
   align-items: center;
   gap: 12px;
   font-size: 0.88rem;
-  color: rgba(255,255,255,0.85);
+  color: #1aff1a;
   backdrop-filter: blur(10px);
   animation: slideIn 0.4s ease;
 }
@@ -442,12 +442,7 @@ body {
    CALENDÁRIO
 =========================== */
 .calendario-section {
-  background: rgba(0, 0, 0, 0.45);
-  border-radius: 14px;
-  padding: 24px;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-left: 5px solid #ff0037;
+  background: rgba(0, 0, 0, 0.75);
   border: 1px solid rgba(255,255,255,0.07);
   border-left: 5px solid #ff0037;
 }
@@ -575,7 +570,7 @@ body {
    PAINEL MODO (MOTORISTA / PASSAGEIRO)
 =========================== */
 .painel-modo {
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.75);
   border-radius: 14px;
   padding: 24px;
   backdrop-filter: blur(20px);
@@ -636,9 +631,7 @@ body {
   border: 1px solid rgba(255,255,255,0.12);
   border-radius: 7px;
   padding: 10px 14px;
-  color: #fff;
-  font-family: 'Merriweather', serif;
-  font-size: 0.82rem;
+  color: #1aff1a;
   outline: none;
   transition: border 0.2s;
   width: 100%;
@@ -763,7 +756,7 @@ body {
 .pass-info strong {
   font-family: 'Montserrat', sans-serif;
   font-size: 0.82rem;
-  color: #fff;
+  color: #1aff1a;
 }
 
 .pass-info span {
@@ -833,7 +826,7 @@ body {
 .carona-motorista strong {
   font-family: 'Montserrat', sans-serif;
   font-size: 0.82rem;
-  color: #fff;
+  color: #1aff1a;
   display: block;
 }
 
@@ -856,9 +849,9 @@ body {
 
 .vagas-badge {
   display: inline-block;
-  background: rgba(26,255,26,0.12);
-  border: 1px solid rgba(26,255,26,0.3);
-  color: #1aff1a;
+  background: rgba(148,0,126,0.2);
+  border: 1px solid rgba(148,0,126,0.6);
+  color: #d070cc;
   padding: 2px 10px;
   border-radius: 20px;
   font-family: 'Montserrat', sans-serif;
@@ -991,7 +984,7 @@ body {
 
 .modal-evento-texto {
   font-size: 0.88rem;
-  color: rgba(255,255,255,0.75);
+  color: #1aff1a;
   line-height: 1.7;
 }
 

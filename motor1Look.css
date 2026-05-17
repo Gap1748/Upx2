@@ -88,3 +88,38 @@ button:hover {
     box-shadow: 0 8px 15px rgba(0,0,0,0.5);
 }
 
+
+.field-group {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 0;
+  margin: 10px 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.field-group input {
+  flex: 1;
+  width: 0;
+  margin: 0;
+  border-radius: 8px 0 0 8px;
+  border: 2px solid #1aff1a;
+  border-right: none;
+  padding: 15px 20px;
+  box-sizing: border-box;
+}
+
+.field-group label {
+  background: #000000;
+  color: #1aff1a;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  border-radius: 0 8px 8px 0;
+  border: 2px solid #1aff1a;
+  border-left: none;
+}
