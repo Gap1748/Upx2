@@ -11,19 +11,28 @@
 
   <form id="formRegistra">
     
+    <!-- MODO ANTIGO (placeholder dentro do campo):
     <input type="text" name="cnh"      id="cnh"      placeholder="CNH" maxlength="11"  required>
     <input type="date"  name="validade" id="validade" placeholder="Data de validade" required>
+    -->
+    <div class="field-group">
+      <input type="text" name="cnh" id="cnh" maxlength="11" required>
+      <label for="cnh">CNH</label>
+    </div>
+    <div class="field-group">
+      <input type="date" name="validade" id="validade" required>
+      <label for="validade">Data de validade</label>
+    </div>
 
     <div class="button-container">
       <button type="submit" class="ckr-marar">Proximo</button>
-      <button type="button" class="ckr-voltam" onclick="location.href='StartZ.html'">Voltar</button>
+      <button type="button" class="ckr-voltam" onclick="location.href='Login.html'">Voltar</button>
     </div>
 
     
   </form>
 
   <script>
-
     // Recupera o usuário logado do localStorage
 const _dadosSalvos = localStorage.getItem("usuarioLogado");
 if (_dadosSalvos) {

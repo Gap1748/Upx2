@@ -10,11 +10,33 @@
     <h1><span>Dados do Veículo</span></h1>
 
     <form id="formRegistre">
+        <!-- MODO ANTIGO (placeholder dentro do campo):
         <input type="text" name="placa" id="placa" placeholder="Placa (ABC1D23)" maxlength="7" required>
         <input type="text" name="marca"  placeholder="Marca (Ex: Subaru)" required>
         <input type="text" name="modelo" placeholder="Modelo (Ex: WRX)" required>
         <input type="text" name="cor"    placeholder="Cor do Veículo" required>
         <input type="number" name="ano" id="ano" placeholder="Ano" min="-753" max="2077" required>
+        -->
+        <div class="field-group">
+          <input type="text" name="placa" id="placa" maxlength="7" required>
+          <label for="placa">Placa (ABC1D23)</label>
+        </div>
+        <div class="field-group">
+          <input type="text" name="marca" id="marca" required>
+          <label for="marca">Marca (Ex: Subaru)</label>
+        </div>
+        <div class="field-group">
+          <input type="text" name="modelo" id="modelo" required>
+          <label for="modelo">Modelo (Ex: WRX)</label>
+        </div>
+        <div class="field-group">
+          <input type="text" name="cor" id="cor" required>
+          <label for="cor">Cor do Veículo</label>
+        </div>
+        <div class="field-group">
+          <input type="number" name="ano" id="ano" min="-753" max="2077" required>
+          <label for="ano">Ano</label>
+        </div>
         <div class="button-container">
             <button type="submit" class="ckr-marar">Próximo</button>
             <button type="button" class="ckr-voltam" onclick="location.href='motor1.html'">Voltar</button>
@@ -41,9 +63,9 @@
         ano: parseInt(document.getElementById("ano").value)
     };
 
-    const usuarioId = parseInt(
-        localStorage.getItem("usuarioId")
-    );
+   const usuarioLogado = JSON.parse(localStorage.getItem("usuarioLogado"));
+   const usuarioId = usuarioLogado.id;
+
 
     try {
 
@@ -110,6 +132,24 @@
             alert("Erro na conexão com o servidor");
         }
     });
+      function RandomBackgroundDesu() {
+    const Rando = Math.random(); 
+    let ImagicusChoosen = "";
+
+    if (Rando < 0.40) {
+        ImagicusChoosen = 'DaBackground.webp';
+    } else if (Rando < 0.80) {
+        ImagicusChoosen = 'DaBackGround.webp';
+    } else if (Rando < 0.99) {
+        ImagicusChoosen = 'daBackGround.webp';
+    } else {
+        ImagicusChoosen = 'DaBackDaGround.webp';
+    }
+    const AllTheWay = `Keks_Und_Lols/${ImagicusChoosen}`;    
+
+    document.body.style.backgroundImage = `url('${AllTheWay}')`;
+  }
+   window.onload = RandomBackgroundDesu;
     </script>
 
 </body>

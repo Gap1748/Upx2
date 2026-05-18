@@ -57,7 +57,7 @@
 
 <div class="mode-toggle">
 
-<span class="toggle-label" id="labelMotorista">Motorista</span>
+<span class="toggle-label" id="labelMotorista">Passageiro</span>
 
 <div class="toggle-track" id="toggleTrack" onclick="alternarModo()">
 
@@ -65,7 +65,7 @@
 
 </div>
 
-<span class="toggle-label" id="labelPassageiro">Passageiro</span>
+<span class="toggle-label" id="labelPassageiro">Motorista</span>
 </div>
 
 <button class="btn-voltar" onclick="location.href='Basicus.html'">← Voltar</button>
@@ -665,8 +665,10 @@ function alternarModo() {
     document.getElementById('avisoTexto').innerHTML = 'Hoje você tem <strong>3 passageiros</strong> confirmados. Saída às <strong>7h00</strong> da <strong>Av. Dr. Afonso Vergueiro, 1300</strong>';
     
     // chama a verificação em vez de trocar direto
-    trocarParaMotorista();
-    carregarDadosCalendario();
+      trocarParaMotorista();
+      carregarDadosCalendario();
+     // document.getElementById('painelMotorista').style.display = 'block';
+    // document.getElementById('painelPassageiro').style.display = 'none';
 
   } else {
     thumb.style.transform    = 'translateX(0px)';
@@ -678,9 +680,11 @@ function alternarModo() {
     // chama a função do trocar-painel.js
     trocarParaPassageiro();
     carregarDadosCalendario();
+     // document.getElementById('painelMotorista').style.display = 'none';
+    //document.getElementById('painelPassageiro').style.display = 'block';
   }
 
-   carregarDadosCalendario();
+     carregarDadosCalendario();
 }
 
 
@@ -934,13 +938,13 @@ window.onload = function() {
 
 RandomBackgroundDesu();
 
- carregarDadosCalendario();
+ //carregarDadosCalendario();
 // Inicia toggle visual no modo motorista
 
-document.getElementById('toggleThumb').style.transform = 'translateX(26px)';
-
-document.getElementById('toggleTrack').style.background = 'rgba(148, 0, 126, 0.6)';
-
+document.getElementById('toggleThumb').style.transform = 'translateX(0px)';
+document.getElementById('toggleTrack').style.background = 'rgba(255, 0, 55, 0.4)';
+document.getElementById('profileRoleTag').textContent = 'Passageiro';
+document.getElementById('profileRoleTag').style.background = 'rgba(255,0,55,0.25)';
 };
 
 </script>
