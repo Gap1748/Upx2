@@ -63,9 +63,9 @@
         ano: parseInt(document.getElementById("ano").value)
     };
 
-    const usuarioId = parseInt(
-        localStorage.getItem("usuarioId")
-    );
+   const usuarioLogado = JSON.parse(localStorage.getItem("usuarioLogado"));
+   const usuarioId = usuarioLogado.id;
+
 
     try {
 
@@ -132,15 +132,15 @@
             alert("Erro na conexão com o servidor");
         }
     });
-      function RandomBackgroundDesu() {
+function RandomBackgroundDesu() {
     const Rando = Math.random(); 
     let ImagicusChoosen = "";
 
-    if (Rando < 0.40) {
+    if (Rando < 0.400) {
         ImagicusChoosen = 'DaBackground.webp';
-    } else if (Rando < 0.80) {
+    } else if (Rando < 0.800) {
         ImagicusChoosen = 'DaBackGround.webp';
-    } else if (Rando < 0.99) {
+    } else if (Rando < 0.999) {
         ImagicusChoosen = 'daBackGround.webp';
     } else {
         ImagicusChoosen = 'DaBackDaGround.webp';
@@ -148,8 +148,21 @@
     const AllTheWay = `Keks_Und_Lols/${ImagicusChoosen}`;    
 
     document.body.style.backgroundImage = `url('${AllTheWay}')`;
-  }
-   window.onload = RandomBackgroundDesu;
+}
+window.onload = RandomBackgroundDesu;
+
+   document.querySelectorAll('#formRegistre .field-group input').forEach((input, i, inputs) => {
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        if (i < inputs.length - 1) {
+          inputs[i + 1].focus();
+        } else {
+          document.getElementById('formRegistre').requestSubmit();
+        }
+      }
+    });
+  });
     </script>
 
 </body>

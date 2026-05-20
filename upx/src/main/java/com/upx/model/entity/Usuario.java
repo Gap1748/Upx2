@@ -3,7 +3,6 @@ package com.upx.model.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 //basicamente uma table do banco de dados só que em java e com os getter e setter aqui
 //obs: segundo o pfsor Edson , só de existir esse cód ja cria a table , não entendi direito, testar depois
@@ -17,7 +16,7 @@ public class Usuario {
     private Long id;
 
     @Column(name = "nome_completo")
-    @JsonProperty("nome_completo")
+    
     private String nomeCompleto;
 
     private String cpf;

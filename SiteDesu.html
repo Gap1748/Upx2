@@ -620,15 +620,15 @@ const Rando = Math.random();
 
 let ImagicusChoosen = "";
 
-if (Rando < 0.40) {
+if (Rando < 0.400) {
 
 ImagicusChoosen = 'DaBackground.webp';
 
-} else if (Rando < 0.80) {
+} else if (Rando < 0.800) {
 
 ImagicusChoosen = 'daBackGround.webp';
 
-} else if (Rando < 0.99) {
+} else if (Rando < 0.999) {
 
 ImagicusChoosen = 'DaBackGround.webp';
 
@@ -665,10 +665,10 @@ function alternarModo() {
     document.getElementById('avisoTexto').innerHTML = 'Hoje você tem <strong>3 passageiros</strong> confirmados. Saída às <strong>7h00</strong> da <strong>Av. Dr. Afonso Vergueiro, 1300</strong>';
     
     // chama a verificação em vez de trocar direto
- //   trocarParaMotorista();
-   // carregarDadosCalendario();
-       document.getElementById('painelMotorista').style.display = 'block';
-    document.getElementById('painelPassageiro').style.display = 'none';
+      trocarParaMotorista();
+      carregarDadosCalendario();
+     // document.getElementById('painelMotorista').style.display = 'block';
+    // document.getElementById('painelPassageiro').style.display = 'none';
 
   } else {
     thumb.style.transform    = 'translateX(0px)';
@@ -678,13 +678,13 @@ function alternarModo() {
     document.getElementById('avisoTexto').innerHTML = 'Hoje você pegará carona com <strong>Lucas F.</strong> na <strong>Av. Dr. Afonso Vergueiro, 1300</strong> às <strong>7h00</strong>';
 
     // chama a função do trocar-painel.js
-  //  trocarParaPassageiro();
-  //  carregarDadosCalendario();
-      document.getElementById('painelMotorista').style.display = 'none';
-    document.getElementById('painelPassageiro').style.display = 'block';
+    trocarParaPassageiro();
+    carregarDadosCalendario();
+     // document.getElementById('painelMotorista').style.display = 'none';
+    //document.getElementById('painelPassageiro').style.display = 'block';
   }
 
- //  carregarDadosCalendario();
+     carregarDadosCalendario();
 }
 
 
@@ -948,11 +948,11 @@ document.getElementById('profileRoleTag').style.background = 'rgba(255,0,55,0.25
 };
 
 </script>
-<!-- 
+
 <script src="Js/Trocar-Painel.js"></script>
 <script src="Js/Corridas.js"></script>
 <script src="Js/Calendario.js"></script>
--->
+
 </body>
 
 </html> 

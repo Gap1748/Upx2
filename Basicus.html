@@ -37,16 +37,15 @@
 </button>
 
 <script>
-  //Function (parada que quero hacer) Const (parada que quero usar vezes)
-  function RandomBackgroundDesu() {
+function RandomBackgroundDesu() {
     const Rando = Math.random(); 
     let ImagicusChoosen = "";
 
-    if (Rando < 0.40) {
+    if (Rando < 0.400) {
         ImagicusChoosen = 'DaBackground.webp';
-    } else if (Rando < 0.80) {
+    } else if (Rando < 0.800) {
         ImagicusChoosen = 'DaBackGround.webp';
-    } else if (Rando < 0.99) {
+    } else if (Rando < 0.999) {
         ImagicusChoosen = 'daBackGround.webp';
     } else {
         ImagicusChoosen = 'DaBackDaGround.webp';
@@ -54,9 +53,8 @@
     const AllTheWay = `Keks_Und_Lols/${ImagicusChoosen}`;    
 
     document.body.style.backgroundImage = `url('${AllTheWay}')`;
-  }
-  //Aqui fala quando vai rodar isso windows(window porra) onload (ao dar ze load)
-  window.onload = RandomBackgroundDesu;
+}
+window.onload = RandomBackgroundDesu;
 
   
 </script>
