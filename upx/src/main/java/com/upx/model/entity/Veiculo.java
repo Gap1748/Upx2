@@ -2,7 +2,7 @@ package com.upx.model.entity;
 
 import jakarta.persistence.*;
 
-//criei a entidade mas por qnquanto não vai ser ultilizada, deixar para quando for adicionar mais coisas
+
 @Entity
 @Table(name = "veiculos")
 public class Veiculo {
