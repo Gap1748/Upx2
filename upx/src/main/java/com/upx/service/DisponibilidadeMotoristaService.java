@@ -43,7 +43,7 @@ public class DisponibilidadeMotoristaService {
 
         if (disponibilidade.getDiasSemana() != null &&
             disponibilidade.getDiasSemana().isBlank()) {
-            disponibilidade.setDiasSemana(null);
+            disponibilidade.setDiasSemana("DIA_UNICO");
         }
 
        

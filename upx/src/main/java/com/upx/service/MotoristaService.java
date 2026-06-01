@@ -31,7 +31,6 @@ public class MotoristaService {
     }
 
     // Verifica se um usuário já tem cadastro de motorista
-    // Usado pelo controller para retornar 200 ou 404
     public Optional<Motorista> buscarPorUsuarioId(Long usuarioId) {
         return motoristaRepository.findByUsuarioId(usuarioId);
     }
