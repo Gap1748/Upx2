@@ -25,6 +25,6 @@ public class UsuarioService {
                 return usuario; // GG
             }
         }
-        return null; // Falhou (usuário não existe ou a senha ta errada)
+        return null; // falhou 
     }
 }

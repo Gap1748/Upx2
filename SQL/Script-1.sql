@@ -1,10 +1,10 @@
--- Criar o banco de dados
+
 CREATE DATABASE app_carona;
 
--- Usar o banco
+-- 2. Usar o banco
 USE app_carona;
 
--- Criar a tabela de usuários
+-- 3. Criar a tabela de usuários
 CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     
@@ -22,16 +22,25 @@ CREATE TABLE usuarios (
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- isso serve para deixar registrado quando foi cadastrado
 );
 
+-- um monte de select para testes
 
--- informações para teste para teste
-INSERT INTO usuarios (nome_completo, cpf, ra, email, telefone, endereco, senha)
-VALUES 
-('Gabriel Augusto', '123.456.789-00', '2023001', 'gabriel@email.com', '11999999999', 'Rua A, 123', '1234'),
+SELECT * FROM usuarios;
 
-('Maria Silva', '987.654.321-00', '2023002', 'maria@email.com', '11988888888', 'Av. Brasil, 456', 'senha123'),
+SELECT * FROM corridas;
 
-('João Santos', '111.222.333-44', '2023003', 'joao@email.com', '11977777777', 'Rua das Flores, 789', 'abc123'),
+SELECT * FROM motoristas;
 
-('Ana Oliveira', '555.666.777-88', '2023004', 'ana@email.com', '11966666666', 'Rua Central, 321', 'minhasenha');
+SELECT * FROM veiculos;
 
-SELECT * FROM usuarios;-- teste
+SELECT * FROM disponibilidades_motorista;
+
+
+-- isso é para adicionar as colunas para mudar a entrada do tempo da disponibilidade
+ALTER TABLE disponibilidades_motorista
+  ADD COLUMN data_inicio DATE NULL,
+  ADD COLUMN data_fim DATE NULL;
+
+UPDATE disponibilidades_motorista
+SET data_inicio = CURDATE(),
+    data_fim = DATE_ADD(CURDATE(), INTERVAL 1 MONTH)
+WHERE data_inicio IS NULL;

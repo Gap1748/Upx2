@@ -253,9 +253,11 @@
 
 <span class="aviso-icon">📍</span>
 
-<span id="avisoTexto">Hoje você pegará carona com <strong>Lucas F.</strong> na <strong>Av. Dr. Afonso Vergueiro, 1300</strong> às <strong>7h00</strong></span>
+<span id="avisoTexto"></span>
 
 </div>
+
+<!-- comentai para não deixar isso solto na pagina -->
 
 
 <!-- CALENDÁRIO -->
@@ -331,6 +333,25 @@
 </div>
 
 </div>
+
+<!-- PERÍODO DE DISPONIBILIDADE -->
+<div class="form-row">
+  <label>Período de disponibilidade:</label>
+  <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+    <div>
+      <label style="font-size:12px;">De:</label>
+      <input type="date" id="dataInicio" class="form-input">
+    </div>
+    <div>
+      <label style="font-size:12px;">Até:</label>
+      <input type="date" id="dataFim" class="form-input">
+    </div>
+  </div>
+  <small style="color:#aaa; margin-top:4px; display:block;">
+    Para um único dia, coloque a mesma data nos dois campos.
+  </small>
+</div>
+<!-- FIM: Seleção de meses e anos -->
 
 <div class="form-row">
 
@@ -917,6 +938,54 @@ msgs.scrollTop = msgs.scrollHeight;
 }
 
 
+// ===== MESES DE DISPONIBILIDADE (MOTORISTA) =====
+
+let anoDisp = new Date().getFullYear();
+// Estrutura: { 'AAAA-MM': true, ... }
+const mesesSelecionados = {};
+
+function mudarAnoDisp(direcao) {
+  anoDisp += direcao;
+  document.getElementById('anoDispLabel').textContent = anoDisp;
+  atualizarCheckboxesMeses();
+}
+
+function atualizarCheckboxesMeses() {
+  const checks = document.querySelectorAll('#mesesCheck input[type="checkbox"]');
+  checks.forEach(cb => {
+    const mes = parseInt(cb.dataset.mes);
+    const chave = `${anoDisp}-${String(mes).padStart(2,'0')}`;
+    cb.checked = !!mesesSelecionados[chave];
+  });
+}
+
+function atualizarHintMeses() {
+  const selecionados = Object.entries(mesesSelecionados)
+    .filter(([, v]) => v)
+    .map(([k]) => {
+      const [ano, mesIdx] = k.split('-');
+      return `${meses[parseInt(mesIdx)]}/${ano}`;
+    })
+    .sort();
+
+  const hint = document.getElementById('mesesHint');
+  if (selecionados.length === 0) {
+    hint.textContent = 'Nenhum mês selecionado — carona válida para todos os meses';
+  } else {
+    hint.textContent = 'Ativo em: ' + selecionados.join(', ');
+  }
+}
+
+document.addEventListener('change', function(e) {
+  if (e.target.closest('#mesesCheck')) {
+    const mes = parseInt(e.target.dataset.mes);
+    const chave = `${anoDisp}-${String(mes).padStart(2,'0')}`;
+    mesesSelecionados[chave] = e.target.checked || false;
+    if (!e.target.checked) delete mesesSelecionados[chave];
+    atualizarHintMeses();
+  }
+});
+
 // ===== BOTÕES DE PERÍODO =====
 
 document.addEventListener('click', function(e) {
@@ -945,6 +1014,9 @@ document.getElementById('toggleThumb').style.transform = 'translateX(0px)';
 document.getElementById('toggleTrack').style.background = 'rgba(255, 0, 55, 0.4)';
 document.getElementById('profileRoleTag').textContent = 'Passageiro';
 document.getElementById('profileRoleTag').style.background = 'rgba(255,0,55,0.25)';
+
+// Inicia seletor de ano de disponibilidade/ esta dando erro então vai ficar como comentario
+//document.getElementById('anoDispLabel').textContent = anoDisp;
 };
 
 </script>
