@@ -3,8 +3,6 @@ package com.upx.model.entity;
 import jakarta.persistence.*;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
 @Table(name = "motoristas")
 public class Motorista {
@@ -20,7 +18,6 @@ public class Motorista {
     private Usuario usuario;
 
     @OneToMany(mappedBy = "motorista")
-    @JsonIgnore
     private List<Veiculo> veiculos;
 
     public Long getId() {

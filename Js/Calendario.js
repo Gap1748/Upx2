@@ -1,3 +1,7 @@
+// ============================================================
+//  Calendario.js — Integração com backend
+//  Corrigido: suporta múltiplas corridas no mesmo dia
+// ============================================================
 
 const CAL_API = "http://localhost:8080";
 
@@ -7,7 +11,8 @@ function chaveDataCal(ano, mes, dia) {
   return `${ano}-${String(mes+1).padStart(2,"0")}-${String(dia).padStart(2,"0")}`;
 }
 
-// Guarda listas de corridas por dia, é "YYYY-MM-DD", valor é array
+// Guarda listas de corridas por dia — chave é "YYYY-MM-DD", valor é array
+// Ex: { "2026-05-16": [ corrida1, corrida2 ] }
 let _corridasPorDia = {};
 
 // ── Motorista: disponibilidades recorrentes por dia da semana ──
@@ -49,7 +54,7 @@ async function carregarEventosMotorista(usuario, ano, mes) {
   }
 }
 
-// agrupa corridas por dia do passageiro
+// ── Passageiro: agrupa corridas por dia ──
 async function carregarEventosPassageiro(usuario, ano, mes) {
   try {
     const res = await fetch(`${CAL_API}/corridas/passageiro/${usuario.id}`);
@@ -106,7 +111,7 @@ async function carregarEventosPassageiro(usuario, ano, mes) {
   }
 }
 
-
+// ── Função principal chamada pelo HTML ──
 async function carregarDadosCalendario() {
   const usuario = window.usuarioLogado;
   if (!usuario) {

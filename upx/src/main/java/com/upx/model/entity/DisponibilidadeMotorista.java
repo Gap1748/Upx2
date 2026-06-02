@@ -1,9 +1,13 @@
 package com.upx.model.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+// Guarda a disponibilidade recorrente do motorista para funcionar com a ideia do frontend
+// Ex: "Toda Seg a Sex, saindo às 19h do Centro, com 2 vagas"
+// É diferente de Corrida — Corrida é uma viagem que vai acontecer/aconteceu
+// Disponibilidade é o "estou disponível para oferecer carona nesse padrão"
+// Foi necessario adicionar pois o frontend seguiu por um caminho diferente do inicial. por enquanto Corrida esta inutil.
 @Entity
 @Table(name = "disponibilidades_motorista")
 public class DisponibilidadeMotorista {
@@ -12,36 +16,39 @@ public class DisponibilidadeMotorista {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Motorista que está oferecendo a carona
     @ManyToOne
     @JoinColumn(name = "motorista_id", nullable = false)
     private Usuario motorista;
 
-
-    @Column(name = "dias_semana")
+    // Dias da semana separados por vírgula
+    // Ex: "SEG,TER,QUA,QUI,SEX"
+    @Column(name = "dias_semana", nullable = false)
     private String diasSemana;
 
+    // Ponto de partida (origem)
     @Column(name = "ponto_partida", nullable = false)
     private String pontoPartida;
 
+    // Horário de saída para a instituição
+    // Guardado como String "HH:mm" para simplicidade no MVP
     @Column(name = "horario_ida", nullable = false)
     private String horarioIda;
 
+    // Horário de saída da instituição (volta)
     @Column(name = "horario_volta")
     private String horarioVolta;
 
+    // Quantas vagas o motorista oferece
     @Column(name = "vagas_disponiveis", nullable = false)
     private int vagasDisponiveis;
 
-
-    @Column(name = "data_inicio", nullable = false)
-    private LocalDate dataInicio;
-
-    @Column(name = "data_fim", nullable = false)
-    private LocalDate dataFim;
-
+    // Se a disponibilidade ainda está ativa
+    // false = motorista pausou / desativou
     @Column(nullable = false)
     private boolean ativa = true;
 
+    // Preenchido automaticamente ao criar
     @Column(name = "criado_em")
     private LocalDateTime criadoEm;
 
@@ -72,12 +79,6 @@ public class DisponibilidadeMotorista {
 
     public int getVagasDisponiveis() { return vagasDisponiveis; }
     public void setVagasDisponiveis(int vagasDisponiveis) { this.vagasDisponiveis = vagasDisponiveis; }
-
-    public LocalDate getDataInicio() { return dataInicio; }
-    public void setDataInicio(LocalDate dataInicio) { this.dataInicio = dataInicio; }
-
-    public LocalDate getDataFim() { return dataFim; }
-    public void setDataFim(LocalDate dataFim) { this.dataFim = dataFim; }
 
     public boolean isAtiva() { return ativa; }
     public void setAtiva(boolean ativa) { this.ativa = ativa; }

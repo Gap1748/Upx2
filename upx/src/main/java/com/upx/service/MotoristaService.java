@@ -8,7 +8,7 @@ import com.upx.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional; 
+import java.util.Optional; // <- import adicionado
 
 @Service
 public class MotoristaService {
@@ -31,6 +31,7 @@ public class MotoristaService {
     }
 
     // Verifica se um usuário já tem cadastro de motorista
+    // Usado pelo controller para retornar 200 ou 404
     public Optional<Motorista> buscarPorUsuarioId(Long usuarioId) {
         return motoristaRepository.findByUsuarioId(usuarioId);
     }

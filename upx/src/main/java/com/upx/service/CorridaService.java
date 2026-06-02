@@ -47,6 +47,7 @@ public class CorridaService {
     }
 
     // Busca uma corrida existente do motorista na data, ou retorna null
+    // Usado pelo frontend para evitar criar corridas duplicadas
     public Corrida buscarPorMotoristaEData(Long motoristaId, LocalDate data) {
         return repository.findByMotoristaIdAndData(motoristaId, data).orElse(null);
     }

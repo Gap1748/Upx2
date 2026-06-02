@@ -1,10 +1,8 @@
 package com.upx.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.*;
 
-
+//criei a entidade mas por qnquanto não vai ser ultilizada, deixar para quando for adicionar mais coisas
 @Entity
 @Table(name = "veiculos")
 public class Veiculo {
@@ -21,7 +19,6 @@ public class Veiculo {
 
     @ManyToOne
     @JoinColumn(name = "motorista_id", nullable = false)
-    @JsonIgnore
     private Motorista motorista;
 
     //getters e setters (dscobri que o vs code pode fazer eles sozinhos, seria mais util antes)
